@@ -38,6 +38,10 @@
       font-size: 1.1rem;
       color: black;
     }
+
+    button:hover {
+      opacity: 0.85;
+    }
   </style>
 </head>
 
@@ -55,8 +59,8 @@
 function login() {
   const password = document.getElementById("pass").value;
 
-  // CHANGE THIS PASSWORD TO YOUR OWN
-  if (password === "dcpynet123") {
+  // ✅ YOUR ADMIN PASSWORD
+  if (password === "Spyderion2") {
     localStorage.setItem("admin", "true");
     window.location.href = "/admin.html";
   } else {
