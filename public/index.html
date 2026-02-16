@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DCPYnet | Premium Services</title>
+  <title>DCPYnet</title>
+
   <style>
     :root {
       --bg: #000;
       --text: #fff;
-      --subtext: #bfbfbf;
       --green: #00c46b;
       --card-bg: rgba(13,13,13,0.85);
       --border: #1a1a1a;
       --radius: 14px;
-      --transition: 0.25s ease;
       font-family: 'Inter', sans-serif;
     }
 
@@ -22,7 +21,6 @@
       height: 100%;
       background: var(--bg);
       color: var(--text);
-      position: relative;
     }
 
     canvas#snake-bg {
@@ -41,6 +39,7 @@
     }
 
     header {
+      position: relative;
       text-align: center;
       padding: 60px 20px 30px;
       font-size: 3rem;
@@ -52,15 +51,45 @@
       color: var(--green);
     }
 
+    /* TOP RIGHT LOGIN + BALANCE */
+    #topRight {
+      position: absolute;
+      top: 25px;
+      right: 30px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    #loginBtn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: var(--green);
+      color: black;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    #loginBtn:hover {
+      opacity: 0.8;
+    }
+
+    #balanceText {
+      color: var(--green);
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    /* SERVICE DROPDOWN BOX */
     .dropdown {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 20px;
       cursor: pointer;
-      transition: var(--transition);
+      transition: 0.25s ease;
       text-align: center;
-      margin: 20px auto;
+      margin: 40px auto;
       max-width: 400px;
     }
 
@@ -76,17 +105,15 @@
     }
 
     .dropdown-content {
-      max-height: 0;
-      overflow: hidden;
+      display: none;
       margin-top: 15px;
       text-align: left;
-      transition: max-height 0.3s ease;
     }
 
     .dropdown-content a {
       display: block;
-      color: var(--text);
-      padding: 8px 0;
+      color: white;
+      padding: 10px 0;
       text-decoration: none;
       border-bottom: 1px solid var(--border);
       transition: 0.2s;
@@ -97,94 +124,118 @@
     }
   </style>
 </head>
+
 <body>
 
 <canvas id="snake-bg"></canvas>
 
 <div class="main-content">
-  <header><span>DCPYnet</span></header>
 
-  <div class="dropdown" id="dropdownBox">
-    <h3 onclick="toggleDropdown()">Dcpy's Services</h3>
+  <header>
+    <span>DCPYnet</span>
+
+    <!-- LOGIN + BALANCE -->
+    <div id="topRight">
+      <a href="/login.html" id="loginBtn">Login</a>
+      <span id="balanceText"></span>
+    </div>
+  </header>
+
+  <!-- SERVICES DROPDOWN -->
+  <div class="dropdown" onclick="toggleDropdown()">
+    <h3>SMM Services</h3>
+
     <div class="dropdown-content" id="services-dropdown">
-      <a href="instagram-cheap.html">Instagram services</a>
-      <a href="facebook.html">Facebook services</a>
-      <a href="tiktok.html">TikTok services</a>
-      <a href="whatsapp.html">Whatsapp services</a>
-      <a href="telegram.html">Telegram services</a>
+      <a href="instagram-cheap.html">Instagram Services</a>
+      <a href="facebook.html">Facebook Services</a>
+      <a href="tiktok.html">TikTok Services</a>
+      <a href="whatsapp.html">WhatsApp Services</a>
+      <a href="telegram.html">Telegram Services</a>
     </div>
   </div>
+
 </div>
 
 <script>
-const dropdown = document.getElementById('services-dropdown');
-const dropdownBox = document.getElementById('dropdownBox');
-
+/* DROPDOWN TOGGLE */
 function toggleDropdown() {
-  if (dropdown.style.maxHeight && dropdown.style.maxHeight !== "0px") {
-    dropdown.style.maxHeight = "0";
-  } else {
-    dropdown.style.maxHeight = dropdown.scrollHeight + "px";
-  }
+  const dropdown = document.getElementById("services-dropdown");
+  dropdown.style.display =
+    dropdown.style.display === "block" ? "none" : "block";
 }
 
-// Close if clicking outside
-document.addEventListener('click', function(e) {
-  if (!dropdownBox.contains(e.target)) {
-    dropdown.style.maxHeight = "0";
-  }
-});
+/* SHOW BALANCE IF LOGGED IN */
+const user = JSON.parse(localStorage.getItem("user"));
 
-// Snake background
-const canvas = document.getElementById('snake-bg');
-const ctx = canvas.getContext('2d');
+if (user) {
+  document.getElementById("loginBtn").style.display = "none";
+  document.getElementById("balanceText").innerText =
+    "Balance: $" + user.balance;
+}
+
+/* SNAKE BACKGROUND */
+const canvas = document.getElementById("snake-bg");
+const ctx = canvas.getContext("2d");
+
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
 class SnakeLine {
   constructor() { this.reset(); }
+
   reset() {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
     this.vx = (Math.random() - 0.5) * 2;
     this.vy = (Math.random() - 0.5) * 2;
-    this.length = 50 + Math.random() * 100;
+    this.length = 60 + Math.random() * 120;
     this.history = [];
-    this.color = '#00c46b';
+    this.color = "#00c46b";
   }
+
   update() {
     this.x += this.vx;
     this.y += this.vy;
-    this.history.push({x: this.x, y: this.y});
-    if(this.history.length > this.length) this.history.shift();
-    if(this.x < 0 || this.x > width) this.vx *= -1;
-    if(this.y < 0 || this.y > height) this.vy *= -1;
+
+    this.history.push({ x: this.x, y: this.y });
+    if (this.history.length > this.length) this.history.shift();
+
+    if (this.x < 0 || this.x > width) this.vx *= -1;
+    if (this.y < 0 || this.y > height) this.vy *= -1;
   }
-  draw(ctx) {
+
+  draw() {
     ctx.beginPath();
-    for(let i=0;i<this.history.length-1;i++){
-      const p1=this.history[i],p2=this.history[i+1];
-      ctx.strokeStyle=this.color;
-      ctx.lineWidth=2;
-      ctx.moveTo(p1.x,p1.y);
-      ctx.lineTo(p2.x,p2.y);
+    for (let i = 0; i < this.history.length - 1; i++) {
+      const p1 = this.history[i];
+      const p2 = this.history[i + 1];
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = 2;
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
     }
     ctx.stroke();
   }
 }
 
 const snakes = [];
-for(let i=0;i<30;i++) snakes.push(new SnakeLine());
+for (let i = 0; i < 25; i++) snakes.push(new SnakeLine());
 
 function animate() {
-  ctx.fillStyle = 'rgba(0,0,0,0.15)';
-  ctx.fillRect(0,0,width,height);
-  snakes.forEach(s=>{ s.update(); s.draw(ctx); });
+  ctx.fillStyle = "rgba(0,0,0,0.15)";
+  ctx.fillRect(0, 0, width, height);
+
+  snakes.forEach(s => {
+    s.update();
+    s.draw();
+  });
+
   requestAnimationFrame(animate);
 }
+
 animate();
 
-window.addEventListener('resize', ()=>{
+window.addEventListener("resize", () => {
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
 });
