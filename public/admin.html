@@ -2,62 +2,27 @@
 <html>
 <head>
   <title>DCPYnet Admin Panel</title>
-
   <style>
-    body {
-      background: black;
-      color: white;
-      font-family: Arial;
-      padding: 40px;
-    }
-
-    h1 {
-      color: #00c46b;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 25px;
-    }
-
-    th, td {
-      border-bottom: 1px solid #222;
-      padding: 12px;
-      text-align: left;
-    }
-
-    th {
-      color: #00c46b;
-    }
-
+    body { background:black; color:white; font-family:Arial; padding:40px; }
+    h1 { color:#00c46b; }
+    table { width:100%; border-collapse:collapse; margin-top:25px; }
+    th, td { border-bottom:1px solid #222; padding:12px; text-align:left; }
+    th { color:#00c46b; }
     button {
-      padding: 8px 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      background: #00c46b;
-      color: black;
+      padding:8px 14px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:bold;
+      background:#00c46b;
+      color:black;
     }
-
-    button:hover {
-      opacity: 0.8;
-    }
-
-    .status {
-      font-weight: bold;
-      color: orange;
-    }
+    .status { font-weight:bold; color:orange; }
   </style>
 </head>
-
 <body>
 
 <h1>Admin Deposit Approvals</h1>
-
-<p>Pending deposit requests:</p>
 
 <table id="depositTable">
   <thead>
@@ -73,36 +38,39 @@
 </table>
 
 <script>
+if (localStorage.getItem("admin") !== "true") {
+  window.location.href = "/admin-login.html";
+}
+
 async function loadDeposits() {
   const res = await fetch("/api/get-deposits");
   const data = await res.json();
 
-  const tbody = document.querySelector("#depositTable tbody");
+  const tbody = document.querySelector("tbody");
   tbody.innerHTML = "";
 
+  if (data.deposits.length === 0) {
+    tbody.innerHTML = "<tr><td colspan='5'>No pending deposits 🎉</td></tr>";
+    return;
+  }
+
   data.deposits.forEach(dep => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${dep.email}</td>
-      <td>$${dep.amount}</td>
-      <td>${dep.note || ""}</td>
-      <td class="status">${dep.status}</td>
-      <td>
-        <button onclick="approveDeposit('${dep.id}')">
-          Approve
-        </button>
-      </td>
+    tbody.innerHTML += `
+      <tr>
+        <td>${dep.email}</td>
+        <td>$${dep.amount}</td>
+        <td>${dep.note || ""}</td>
+        <td class="status">${dep.status}</td>
+        <td><button onclick="approve('${dep.id}')">Approve</button></td>
+      </tr>
     `;
-
-    tbody.appendChild(row);
   });
 }
 
-async function approveDeposit(id) {
+async function approve(id) {
   const res = await fetch("/api/approve-deposit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({ deposit_id: id })
   });
 
