@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DCPYnet Dashboard</title>
+
+  <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --green: #00c46b;
+      --card-bg: rgba(13,13,13,0.85);
+      --border: #1a1a1a;
+      --radius: 14px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    canvas#snake-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .main-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      position: relative;
+      text-align: center;
+      padding: 60px 20px 30px;
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    header span {
+      color: var(--green);
+    }
+
+    /* TOP RIGHT BALANCE */
+    #topRight {
+      position: absolute;
+      top: 25px;
+      right: 30px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    #balanceText {
+      color: var(--green);
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    /* SERVICE DROPDOWN BOX */
+    .dropdown {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: 0.25s ease;
+      text-align: center;
+      margin: 40px auto;
+      max-width: 400px;
+    }
+
+    .dropdown:hover {
+      border-color: var(--green);
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(0,196,107,0.25);
+    }
+
+    .dropdown h3 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .dropdown-content {
+      display: none;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    .dropdown-content a {
+      display: block;
+      color: white;
+      padding: 10px 0;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dropdown-content a:hover {
+      color: var(--green);
+    }
+  </style>
