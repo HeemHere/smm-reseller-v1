@@ -1,92 +1,107 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>🚀 SMM Services</title>
+  <title>SMM Services</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow-x: hidden;
-      font-family: 'Arial', sans-serif;
-      color: white;
-      background: black;
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --subtext: #bfbfbf;
+      --green: #00c46b; /* money green */
+      --card-bg: #0d0d0d;
+      --border: #1a1a1a;
+      --radius: 14px;
+      --transition: 0.25s ease;
+      font-family: 'Inter', sans-serif;
     }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0; 
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
     }
 
     header {
       text-align: center;
-      padding: 40px 20px;
-      font-size: 2.5em;
-      font-weight: bold;
-      position: relative;
-      z-index: 2;
-      color: #fff;
+      padding: 60px 20px 30px;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    header span {
+      color: var(--green);
     }
 
     section {
       padding: 40px 20px;
-      position: relative;
-      z-index: 2;
+      max-width: 1200px;
+      margin: auto;
     }
 
     section h2 {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 2em;
-      border-bottom: 2px solid #fff;
-      display: inline-block;
-      padding-bottom: 10px;
+      font-size: 2rem;
+      margin-bottom: 40px;
+      font-weight: 600;
+      color: var(--green);
     }
 
     .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px;
     }
 
     .card {
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 15px;
-      width: 220px;
-      padding: 25px 15px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px 20px;
       text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      border: 1px solid #fff;
+      transition: var(--transition);
+      position: relative;
     }
 
     .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(255,255,255,0.3);
+      border-color: var(--green);
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(0, 196, 107, 0.25);
     }
 
     .card h3 {
-      font-size: 1.2em;
-      margin-bottom: 8px;
-      color: #fff;
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      font-weight: 600;
     }
 
     .card p {
-      font-size: 0.95em;
-      color: #ccc;
+      font-size: 0.95rem;
+      color: var(--subtext);
+    }
+
+    /* subtle green glow on hover */
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, transparent, rgba(0, 196, 107, 0.15));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .card:hover::after {
+      opacity: 1;
     }
   </style>
 </head>
+
 <body>
 
-<canvas id="matrix"></canvas>
+<header><span>SMM</span> Services</header>
 
-<header>🚀 SMM Services</header>
-
-<!-- Instagram Section -->
 <section>
   <h2>Instagram</h2>
   <div class="container">
@@ -109,7 +124,6 @@
   </div>
 </section>
 
-<!-- Facebook Section -->
 <section>
   <h2>Facebook</h2>
   <div class="container">
@@ -124,7 +138,6 @@
   </div>
 </section>
 
-<!-- TikTok Section -->
 <section>
   <h2>TikTok</h2>
   <div class="container">
@@ -139,7 +152,6 @@
   </div>
 </section>
 
-<!-- WhatsApp Section -->
 <section>
   <h2>WhatsApp</h2>
   <div class="container">
@@ -154,7 +166,6 @@
   </div>
 </section>
 
-<!-- Telegram Section -->
 <section>
   <h2>Telegram</h2>
   <div class="container">
@@ -168,43 +179,6 @@
     </div>
   </div>
 </section>
-
-<script>
-  const canvas = document.getElementById("matrix");
-  const ctx = canvas.getContext("2d");
-
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const letters = "01";
-  const fontSize = 16;
-  const columns = Math.floor(canvas.width / fontSize);
-  const drops = [];
-
-  for (let x = 0; x < columns; x++) drops[x] = 1;
-
-  function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < drops.length; i++) {
-      const text = letters[Math.floor(Math.random() * letters.length)];
-      ctx.fillStyle = Math.random() > 0.5 ? "#fff" : "#000";
-      ctx.font = fontSize + "px monospace";
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-      drops[i]++;
-    }
-  }
-
-  setInterval(draw, 50);
-
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-</script>
 
 </body>
 </html>
