@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DCPYnet | My Deposits</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #00c46b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 25px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #222;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      color: #00c46b;
+    }
+
+    .pending { color: orange; font-weight: bold; }
+    .approved { color: lime; font-weight: bold; }
+
+    a {
+      color: #00c46b;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>My Deposits</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Note</th>
+      <th>Status</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody id="depositList"></tbody>
+</table>
+
+<a href="/dashboard.html">⬅ Back to Dashboard</a>
+
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) window.location.href = "/login.html";
+
+async function loadDeposits() {
+  const res = await fetch("/api/user-deposits?email=" + user.email);
+  const data = await res.json();
+
+  const list = document.getElementById("depositList");
+  list.innerHTML = "";
+
+  data.deposits.forEach(dep => {
+    list.innerHTML += `
+      <tr>
+        <td>$${dep.amount}</td>
+        <td>${dep.note || ""}</td>
+        <td class="${dep.status}">${dep.status}</td>
+        <td>${new Date(dep.created_at).toLocaleString()}</td>
+      </tr>
+    `;
+  });
+}
+
+loadDeposits();
+</script>
+
+</body>
+</html>
