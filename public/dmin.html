@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DCPYnet Admin</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #00c46b;
+    }
+
+    input, button {
+      padding: 12px;
+      font-size: 1rem;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      background: #00c46b;
+      font-weight: bold;
+      cursor: pointer;
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Admin Approve Deposit</h1>
+
+<p>Paste Deposit ID below:</p>
+
+<input id="depositId" placeholder="Deposit UUID">
+
+<button onclick="approve()">Approve Deposit</button>
+
+<script>
+async function approve() {
+  const deposit_id = document.getElementById("depositId").value;
+
+  const res = await fetch("/api/approve-deposit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deposit_id })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Approved! New Balance: $" + data.newBalance);
+  } else {
+    alert("Error: " + data.error);
+  }
+}
+</script>
+
+</body>
+</html>
