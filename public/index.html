@@ -1,235 +1,72 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>DCPYNET</title>
-  <style>
-    :root {
-      --bg: #000;
-      --text: #fff;
-      --subtext: #bfbfbf;
-      --green: #00c46b;
-      --card-bg: rgba(13,13,13,0.85); /* semi-transparent so background shows */
-      --border: #1a1a1a;
-      --radius: 14px;
-      --transition: 0.25s ease;
-      font-family: 'Inter', sans-serif;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    header {
-      text-align: center;
-      padding: 60px 20px 30px;
-      font-size: 3rem;
-      font-weight: 700;
-      letter-spacing: -1px;
-      z-index: 10;
-      position: relative;
-    }
-
-    header span {
-      color: var(--green);
-    }
-
-    section {
-      padding: 40px 20px;
-      max-width: 1200px;
-      margin: auto;
-      position: relative;
-      z-index: 10;
-    }
-
-    section h2 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 40px;
-      font-weight: 600;
-      color: var(--green);
-    }
-
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 30px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 30px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      z-index: 10;
-    }
-
-    .card:hover {
-      border-color: var(--green);
-      transform: translateY(-6px);
-      box-shadow: 0 0 25px rgba(0, 196, 107, 0.25);
-    }
-
-    .card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-
-    .card p {
-      font-size: 0.95rem;
-      color: var(--subtext);
-    }
-
-    /* subtle green glow on hover */
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, transparent, rgba(0, 196, 107, 0.15));
-      opacity: 0;
-      transition: var(--transition);
-    }
-
-    .card:hover::after {
-      opacity: 1;
-    }
-
-    /* Matrix-style background canvas */
-    canvas#matrix-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
-  </style>
-</head>
-<body>
-
-<canvas id="matrix-bg"></canvas>
-
-<header><span>DCPY</span>NET</header>
-
-<section>
-  <h2>Instagram</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='instagram-followers-hq-profiles.html'">
-      <h3>Followers (HQ Profiles)</h3>
-      <p>Fast & Cheap</p>
-    </div>
-    <div class="card" onclick="location.href='instagram-followers-hq-accounts.html'">
-      <h3>Followers (HQ Accounts)</h3>
-      <p>Best Price & Quality</p>
-    </div>
-    <div class="card" onclick="location.href='instagram-likes.html'">
-      <h3>Likes</h3>
-      <p>Boost posts fast</p>
-    </div>
-    <div class="card" onclick="location.href='instagram-comments.html'">
-      <h3>Comments</h3>
-      <p>Custom or Random</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Facebook</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='facebook-followers.html'">
-      <h3>Followers</h3>
-      <p>Grow pages fast</p>
-    </div>
-    <div class="card" onclick="location.href='facebook-reactions.html'">
-      <h3>Reactions</h3>
-      <p>Like, Love, Wow, Haha</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>TikTok</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='tiktok-likes.html'">
-      <h3>Likes</h3>
-      <p>Real account likes</p>
-    </div>
-    <div class="card" onclick="location.href='tiktok-followers.html'">
-      <h3>Followers</h3>
-      <p>Boost your profile</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>WhatsApp</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='whatsapp-group-members.html'">
-      <h3>Group Members</h3>
-      <p>Boost your groups</p>
-    </div>
-    <div class="card" onclick="location.href='whatsapp-likes.html'">
-      <h3>Likes</h3>
-      <p>Reactions & engagement</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Telegram</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='telegram-followers.html'">
-      <h3>Followers</h3>
-      <p>Grow channels fast</p>
-    </div>
-    <div class="card" onclick="location.href='telegram-likes.html'">
-      <h3>Likes</h3>
-      <p>Boost posts & channels</p>
-    </div>
-  </div>
-</section>
+<canvas id="snake-bg"></canvas>
 
 <script>
-  // Matrix background
-  const canvas = document.getElementById('matrix-bg');
-  const ctx = canvas.getContext('2d');
+const canvas = document.getElementById('snake-bg');
+const ctx = canvas.getContext('2d');
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = window.innerHeight;
-
-  const cols = Math.floor(width / 20) + 1;
-  const ypos = Array(cols).fill(0);
-
-  function matrix() {
-    ctx.fillStyle = 'rgba(0,0,0,0.1)';
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.fillStyle = '#00c46b'; // green
-    ctx.font = '15px monospace';
-
-    for (let i = 0; i < ypos.length; i++) {
-      const text = '||||'; // can be anything or emojis
-      ctx.fillText(text, i * 20, ypos[i]);
-      if (ypos[i] > height + Math.random() * 10000) ypos[i] = 0;
-      else ypos[i] += 20;
-    }
+class SnakeLine {
+  constructor() {
+    this.reset();
   }
 
-  setInterval(matrix, 50);
+  reset() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.vx = (Math.random() - 0.5) * 2; // horizontal speed
+    this.vy = (Math.random() - 0.5) * 2; // vertical speed
+    this.length = 50 + Math.random() * 100;
+    this.history = [];
+    this.color = '#00c46b';
+  }
 
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.history.push({x: this.x, y: this.y});
+    if(this.history.length > this.length) this.history.shift();
+
+    // Bounce off edges
+    if(this.x < 0 || this.x > width) this.vx *= -1;
+    if(this.y < 0 || this.y > height) this.vy *= -1;
+  }
+
+  draw(ctx) {
+    ctx.beginPath();
+    for(let i = 0; i < this.history.length-1; i++) {
+      const p1 = this.history[i];
+      const p2 = this.history[i+1];
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = 2;
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+    }
+    ctx.stroke();
+  }
+}
+
+const snakes = [];
+for(let i=0;i<30;i++){ // 30 lines
+  snakes.push(new SnakeLine());
+}
+
+function animate() {
+  ctx.fillStyle = 'rgba(0,0,0,0.15)';
+  ctx.fillRect(0,0,width,height);
+
+  snakes.forEach(snake => {
+    snake.update();
+    snake.draw(ctx);
   });
-</script>
 
-</body>
-</html>
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+});
+</script>
