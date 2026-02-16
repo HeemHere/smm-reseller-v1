@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DCPYnet | TikTok Services</title>
+  <style>
+    body { background:#000; color:#fff; font-family:Arial; text-align:center; padding:40px; }
+    h1 { color:#00c46b; }
+    .card { background:#111; padding:30px; max-width:500px; margin:auto; border-radius:12px; border:1px solid #1a1a1a; }
+    select,input { width:100%; padding:10px; margin:10px 0; background:#000; color:#fff; border:1px solid #333; border-radius:6px; }
+    button { background:#00c46b; color:#000; padding:12px; border:none; border-radius:6px; cursor:pointer; width:100%; font-weight:bold; }
+    .price { margin-top:15px; font-weight:bold; color:#00c46b; }
+  </style>
+</head>
+<body>
+
+<h1>TikTok Services</h1>
+
+<div class="card">
+  <select id="serviceSelect"></select>
+  <input type="text" id="link" placeholder="TikTok Video / Profile Link">
+  <input type="number" id="quantity" placeholder="Quantity" min="100">
+  <div class="price" id="priceDisplay">Total: $0.00</div>
+  <button onclick="placeOrder()">Place Order</button>
+</div>
+
+<script>
+const services = [
+  { id: 3001, name: "TikTok Followers | HQ | No Refill", price: 1.10 },
+  { id: 3002, name: "TikTok Followers | 30 Day Refill", price: 1.40 },
+  { id: 3003, name: "TikTok Video Views | Cheap", price: 0.30 }
+];
+
+const select = document.getElementById("serviceSelect");
+
+services.forEach(service => {
+  const option = document.createElement("option");
+  option.value = service.id;
+  option.textContent = `${service.name} — $${service.price}/1000`;
+  select.appendChild(option);
+});
+
+document.getElementById("quantity").addEventListener("input", updatePrice);
+select.addEventListener("change", updatePrice);
+
+function updatePrice() {
+  const quantity = document.getElementById("quantity").value;
+  const service = services.find(s => s.id == select.value);
+  if (!quantity || !service) return;
+  const total = (quantity / 1000) * service.price;
+  document.getElementById("priceDisplay").textContent = "Total: $" + total.toFixed(2);
+}
+
+async function placeOrder() {
+  const service = select.value;
+  const link = document.getElementById("link").value;
+  const quantity = document.getElementById("quantity").value;
+
+  if (!link || !quantity) return alert("Fill in all fields");
+
+  const res = await fetch("/api/order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ service, link, quantity })
+  });
+
+  const data = await res.json();
+  alert(data.success ? "Order placed successfully!" : "Order failed.");
+}
+</script>
+
+</body>
+</html>
