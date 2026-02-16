@@ -1,147 +1,234 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>SMM Services</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #111;
-  --text: #fff;
-  --subtext: #aaa;
-  --accent: #00c46b;
-  --card-bg: #1c1c1c;
-  --card-border: #333;
-  --radius: 12px;
-  --transition: 0.3s;
-  font-family: 'Inter', sans-serif;
-}
+  <title>DCPYNET</title>
+  <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --subtext: #bfbfbf;
+      --green: #00c46b;
+      --card-bg: rgba(13,13,13,0.85); /* semi-transparent so background shows */
+      --border: #1a1a1a;
+      --radius: 14px;
+      --transition: 0.25s ease;
+      font-family: 'Inter', sans-serif;
+    }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  margin: 0;
-}
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
 
-header {
-  text-align: center;
-  padding: 60px 20px 40px;
-  font-size: 3rem;
-  font-weight: 700;
-}
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      z-index: 10;
+      position: relative;
+    }
 
-header span { color: var(--accent); }
+    header span {
+      color: var(--green);
+    }
 
-.container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
-  margin: auto;
-  padding: 20px;
-}
+    section {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      position: relative;
+      z-index: 10;
+    }
 
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  padding: 25px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-}
+    section h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+      font-weight: 600;
+      color: var(--green);
+    }
 
-.card:hover {
-  transform: translateY(-5px);
-  border-color: var(--accent);
-  box-shadow: 0 10px 25px rgba(0,196,107,0.3);
-}
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px;
+    }
 
-.card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-}
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      z-index: 10;
+    }
 
-.dropdown {
-  display: none;
-  margin-top: 15px;
-  text-align: left;
-}
+    .card:hover {
+      border-color: var(--green);
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(0, 196, 107, 0.25);
+    }
 
-.dropdown a {
-  display: block;
-  padding: 5px 0;
-  color: var(--subtext);
-  text-decoration: none;
-  transition: 0.2s;
-}
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
 
-.dropdown a:hover {
-  color: var(--accent);
-}
+    .card p {
+      font-size: 0.95rem;
+      color: var(--subtext);
+    }
 
-</style>
+    /* subtle green glow on hover */
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, transparent, rgba(0, 196, 107, 0.15));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .card:hover::after {
+      opacity: 1;
+    }
+
+    /* Matrix-style background canvas */
+    canvas#matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+  </style>
 </head>
 <body>
 
-<header><span>SMM</span> Services</header>
+<canvas id="matrix-bg"></canvas>
 
-<div class="container">
+<header><span>DCPY</span>NET</header>
 
-  <div class="card" onclick="toggleDropdown('instagram')">
-    <h3>Instagram Services</h3>
-    <div id="instagram" class="dropdown">
-      <a href="instagram-followers-hq-profiles.html">Followers (HQ Profiles)</a>
-      <a href="instagram-followers-hq-accounts.html">Followers (HQ Accounts)</a>
-      <a href="instagram-likes.html">Likes</a>
-      <a href="instagram-comments.html">Comments</a>
+<section>
+  <h2>Instagram</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='instagram-followers-hq-profiles.html'">
+      <h3>Followers (HQ Profiles)</h3>
+      <p>Fast & Cheap</p>
+    </div>
+    <div class="card" onclick="location.href='instagram-followers-hq-accounts.html'">
+      <h3>Followers (HQ Accounts)</h3>
+      <p>Best Price & Quality</p>
+    </div>
+    <div class="card" onclick="location.href='instagram-likes.html'">
+      <h3>Likes</h3>
+      <p>Boost posts fast</p>
+    </div>
+    <div class="card" onclick="location.href='instagram-comments.html'">
+      <h3>Comments</h3>
+      <p>Custom or Random</p>
     </div>
   </div>
+</section>
 
-  <div class="card" onclick="toggleDropdown('facebook')">
-    <h3>Facebook Services</h3>
-    <div id="facebook" class="dropdown">
-      <a href="facebook-followers.html">Followers</a>
-      <a href="facebook-reactions.html">Reactions</a>
+<section>
+  <h2>Facebook</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='facebook-followers.html'">
+      <h3>Followers</h3>
+      <p>Grow pages fast</p>
+    </div>
+    <div class="card" onclick="location.href='facebook-reactions.html'">
+      <h3>Reactions</h3>
+      <p>Like, Love, Wow, Haha</p>
     </div>
   </div>
+</section>
 
-  <div class="card" onclick="toggleDropdown('tiktok')">
-    <h3>TikTok Services</h3>
-    <div id="tiktok" class="dropdown">
-      <a href="tiktok-likes.html">Likes</a>
-      <a href="tiktok-followers.html">Followers</a>
+<section>
+  <h2>TikTok</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='tiktok-likes.html'">
+      <h3>Likes</h3>
+      <p>Real account likes</p>
+    </div>
+    <div class="card" onclick="location.href='tiktok-followers.html'">
+      <h3>Followers</h3>
+      <p>Boost your profile</p>
     </div>
   </div>
+</section>
 
-  <div class="card" onclick="toggleDropdown('whatsapp')">
-    <h3>WhatsApp Services</h3>
-    <div id="whatsapp" class="dropdown">
-      <a href="whatsapp-group-members.html">Group Members</a>
-      <a href="whatsapp-likes.html">Likes</a>
+<section>
+  <h2>WhatsApp</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='whatsapp-group-members.html'">
+      <h3>Group Members</h3>
+      <p>Boost your groups</p>
+    </div>
+    <div class="card" onclick="location.href='whatsapp-likes.html'">
+      <h3>Likes</h3>
+      <p>Reactions & engagement</p>
     </div>
   </div>
+</section>
 
-  <div class="card" onclick="toggleDropdown('telegram')">
-    <h3>Telegram Services</h3>
-    <div id="telegram" class="dropdown">
-      <a href="telegram-followers.html">Followers</a>
-      <a href="telegram-likes.html">Likes</a>
+<section>
+  <h2>Telegram</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='telegram-followers.html'">
+      <h3>Followers</h3>
+      <p>Grow channels fast</p>
+    </div>
+    <div class="card" onclick="location.href='telegram-likes.html'">
+      <h3>Likes</h3>
+      <p>Boost posts & channels</p>
     </div>
   </div>
-
-</div>
+</section>
 
 <script>
-function toggleDropdown(id) {
-  const dropdown = document.getElementById(id);
-  const allDropdowns = document.querySelectorAll('.dropdown');
-  allDropdowns.forEach(d => {
-    if(d !== dropdown) d.style.display = 'none';
+  // Matrix background
+  const canvas = document.getElementById('matrix-bg');
+  const ctx = canvas.getContext('2d');
+
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  const cols = Math.floor(width / 20) + 1;
+  const ypos = Array(cols).fill(0);
+
+  function matrix() {
+    ctx.fillStyle = 'rgba(0,0,0,0.1)';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = '#00c46b'; // green
+    ctx.font = '15px monospace';
+
+    for (let i = 0; i < ypos.length; i++) {
+      const text = '||||'; // can be anything or emojis
+      ctx.fillText(text, i * 20, ypos[i]);
+      if (ypos[i] > height + Math.random() * 10000) ypos[i] = 0;
+      else ypos[i] += 20;
+    }
+  }
+
+  setInterval(matrix, 50);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
   });
-  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-}
 </script>
 
 </body>
