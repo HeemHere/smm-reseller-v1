@@ -27,7 +27,7 @@
       font-weight: bold;
       position: relative;
       z-index: 2;
-      color: #0f0;
+      color: #fff;
     }
 
     .container {
@@ -41,25 +41,25 @@
     }
 
     .card {
-      background: rgba(0, 0, 0, 0.5); /* semi-transparent */
+      background: rgba(0, 0, 0, 0.8); /* more opaque so text is readable */
       border-radius: 15px;
       width: 250px;
       padding: 30px 20px;
       text-align: center;
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      border: 1px solid #0f0;
+      border: 1px solid #fff; /* white border for contrast */
     }
 
     .card:hover {
       transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(0,255,0,0.5);
+      box-shadow: 0 10px 20px rgba(255,255,255,0.3);
     }
 
     .card h2 {
       font-size: 1.3em;
       margin-bottom: 10px;
-      color: #0f0;
+      color: #fff;
     }
 
     .card p {
@@ -116,14 +116,14 @@
   for (let x = 0; x < columns; x++) drops[x] = 1;
 
   function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // trail effect
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // subtle trail
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#0F0"; // green letters
-    ctx.font = fontSize + "px monospace";
 
     for (let i = 0; i < drops.length; i++) {
       const text = letters[Math.floor(Math.random() * letters.length)];
+      // randomize black or white for each drop
+      ctx.fillStyle = Math.random() > 0.5 ? "#fff" : "#000";
+      ctx.font = fontSize + "px monospace";
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
       if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
