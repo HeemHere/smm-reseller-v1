@@ -45,7 +45,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>Order Followers</h1>
+    <h1>Order SMM Service</h1>
+    <input type="number" id="serviceId" placeholder="Enter Service ID" />
     <input type="text" id="link" placeholder="Enter Instagram URL" />
     <input type="number" id="quantity" placeholder="Enter Quantity" />
     <button onclick="placeOrder()">Place Order</button>
@@ -54,12 +55,13 @@
 
   <script>
     async function placeOrder() {
+      const serviceId = document.getElementById('serviceId').value;
       const link = document.getElementById('link').value;
       const quantity = document.getElementById('quantity').value;
       const responseDiv = document.getElementById('response');
 
-      if (!link || !quantity) {
-        responseDiv.innerText = "Please enter both link and quantity!";
+      if (!serviceId || !link || !quantity) {
+        responseDiv.innerText = "Please enter service ID, link, and quantity!";
         return;
       }
 
@@ -69,7 +71,7 @@
         const res = await fetch('/api/order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ link, quantity })
+          body: JSON.stringify({ service: serviceId, link, quantity })
         });
 
         const data = await res.json();
