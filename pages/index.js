@@ -1,4 +1,3 @@
-
 export default function Home() {
   return (
     <div style={{
@@ -10,7 +9,7 @@ export default function Home() {
       alignItems: "center",
       fontFamily: "Arial"
     }}>
-      <h1>DCPYnet Backend Running ✅</h1>
+      <h1>DCPYnet API Running ✅</h1>
     </div>
   );
 }
