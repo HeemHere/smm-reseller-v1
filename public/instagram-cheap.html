@@ -1,115 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Instagram Services</title>
-  <style>
-    body { background: #0f0f0f; font-family: Arial; color: white; text-align: center; padding: 40px; }
-    select, input { padding: 10px; margin: 8px; width: 300px; border-radius: 8px; border: none; }
-    button { padding: 12px 20px; background: #ff2e63; border: none; border-radius: 8px; color: white; cursor: pointer; }
-    button:hover { background: #ff4f7a; }
-    #price, #response { margin-top: 15px; }
-  </style>
+<meta charset="UTF-8">
+<title>dcpynet - Instagram</title>
+<style>
+:root {
+  --bg: #000;
+  --text: #fff;
+  --subtext: #bfbfbf;
+  --green: #00c46b;
+  --card-bg: #0d0d0d;
+  --border: #1a1a1a;
+  --radius: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  text-align:center;
+  padding:50px 20px;
+  font-size:3rem;
+  font-weight:700;
+}
+header span { color: var(--green); }
+
+.container { max-width:600px; margin:auto; padding:20px; }
+label { display:block; margin-top:20px; font-weight:600; }
+select, input { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:none; font-size:1rem; }
+button { margin-top:20px; padding:15px; width:100%; border:none; border-radius:8px; background:var(--green); color:#000; font-weight:700; cursor:pointer; font-size:1rem; }
+
+#total { margin-top:10px; font-weight:600; color: var(--green); }
+</style>
 </head>
 <body>
 
-<h2>Instagram Services</h2>
+<header><span>dcpynet</span> Instagram</header>
+<div class="container">
+  <label>Category</label>
+  <select id="category">
+    <option value="followers">Followers</option>
+    <option value="likes">Likes</option>
+    <option value="comments">Comments</option>
+  </select>
 
-<select id="serviceType">
-  <option value="8959" data-price="1.33" data-min="30" data-max="100000">Followers — Real & Old Accounts (No Refill)</option>
-  <option value="8960" data-price="1.55" data-min="30" data-max="100000">Followers — Real & Old Accounts (30 Days Refill)</option>
-  <option value="8954" data-price="1.20" data-min="100" data-max="10000">Followers — HQ Accounts 10K</option>
-  <option value="8955" data-price="1.21" data-min="100" data-max="20000">Followers — HQ Accounts 20K</option>
-  <option value="8917" data-price="1.10" data-min="100" data-max="10000000">Likes — Profile Photo Accounts</option>
-  <option value="8923" data-price="1.077" data-min="10" data-max="5000000">Likes — HQ Profiles</option>
-  <option value="8901" data-price="1.45" data-min="50" data-max="10000">Comments — Random Real Accounts</option>
-</select>
+  <label>Quality</label>
+  <select id="quality"></select>
 
-<br>
+  <label>Refill</label>
+  <select id="refill"></select>
 
-<input type="text" id="link" placeholder="Enter Instagram URL">
-<br>
-<input type="number" id="quantity" placeholder="Enter Quantity">
+  <label>Quantity</label>
+  <input type="number" id="quantity" min="1" value="100">
 
-<br><br>
-<button onclick="placeOrder()">Place Order</button>
+  <label>Link</label>
+  <input type="text" id="link" placeholder="Paste post/profile link">
 
-<p id="price"></p>
-<p id="response"></p>
+  <div id="total">Total: $0.00</div>
+  <button id="orderBtn">Place Order</button>
+</div>
 
 <script>
-const PROFIT_PER_1K = 1; // your added $1 profit
+// === SERVICE DATA ===
+const services = {
+  followers: [
+    {id:8950, name:"HQ Profiles", refill:"No Refill", price:1.21},
+    {id:8951, name:"HQ Profiles", refill:"No Refill", price:1.22},
+    {id:8959, name:"Real & Old +7-15 Posts", refill:"No Refill", price:1.33},
+    {id:8960, name:"Real & Old +7-15 Posts", refill:"30 Days", price:1.55},
+    {id:8933, name:"HQ Accounts", refill:"No Refill", price:1.31},
+    {id:8934, name:"HQ Accounts", refill:"No Refill", price:1.32}
+  ],
+  likes: [
+    {id:8923, name:"HQ Profiles", refill:"No Refill", price:1.077},
+    {id:8917, name:"Profile Photos", refill:"No Refill", price:1.10}
+  ],
+  comments: [
+    {id:8901, name:"Random", refill:"No Refill", price:1.45},
+    {id:8904, name:"Custom", refill:"No Refill", price:1.52}
+  ]
+};
 
-let balance = 50; // example balance, can later connect Stripe/payments
+// === POPULATE QUALITY & REFILL DROPDOWNS ===
+const categoryEl = document.getElementById('category');
+const qualityEl = document.getElementById('quality');
+const refillEl = document.getElementById('refill');
+const quantityEl = document.getElementById('quantity');
+const totalEl = document.getElementById('total');
 
-const serviceSelect = document.getElementById("serviceType");
-const quantityInput = document.getElementById("quantity");
-const priceEl = document.getElementById("price");
-
-function updatePrice() {
-  const qty = parseInt(quantityInput.value) || 0;
-  const option = serviceSelect.selectedOptions[0];
-  const basePrice = parseFloat(option.dataset.price);
-  const costPer1k = basePrice + PROFIT_PER_1K;
-  const cost = (qty / 1000) * costPer1k;
-  priceEl.innerText = `Cost: $${cost.toFixed(2)}`;
+function updateDropdowns() {
+  const cat = categoryEl.value;
+  const catServices = services[cat];
+  // unique qualities
+  const qualities = [...new Set(catServices.map(s=>s.name))];
+  qualityEl.innerHTML = qualities.map(q=>`<option value="${q}">${q}</option>`).join('');
+  updateRefill();
 }
 
-quantityInput.addEventListener("input", updatePrice);
-serviceSelect.addEventListener("change", updatePrice);
+function updateRefill() {
+  const cat = categoryEl.value;
+  const qual = qualityEl.value;
+  const catServices = services[cat].filter(s=>s.name===qual);
+  const refills = [...new Set(catServices.map(s=>s.refill))];
+  refillEl.innerHTML = refills.map(r=>`<option value="${r}">${r}</option>`).join('');
+  updateTotal();
+}
 
-async function placeOrder() {
-  const option = serviceSelect.selectedOptions[0];
-  const serviceId = option.value;
-  const basePrice = parseFloat(option.dataset.price);
-  const minQty = parseInt(option.dataset.min);
-  const maxQty = parseInt(option.dataset.max);
+function getService() {
+  const cat = categoryEl.value;
+  const qual = qualityEl.value;
+  const refill = refillEl.value;
+  const catServices = services[cat].filter(s=>s.name===qual && s.refill===refill);
+  return catServices[0]; // first match
+}
 
-  const link = document.getElementById("link").value;
-  const quantity = parseInt(quantityInput.value);
-  const response = document.getElementById("response");
+function updateTotal() {
+  const service = getService();
+  const qty = parseInt(quantityEl.value)||0;
+  const total = service ? (service.price * (qty/1000)).toFixed(2) : 0;
+  totalEl.textContent = `Total: $${total}`;
+}
 
-  if (!link || !quantity) {
-    response.innerText = "❌ Fill everything!";
-    return;
-  }
+categoryEl.addEventListener('change', ()=>{ updateDropdowns(); });
+qualityEl.addEventListener('change', ()=>{ updateRefill(); });
+refillEl.addEventListener('change', ()=>{ updateTotal(); });
+quantityEl.addEventListener('input', ()=>{ updateTotal(); });
 
-  if (quantity < minQty || quantity > maxQty) {
-    response.innerText = `❌ Quantity must be between ${minQty} and ${maxQty}`;
-    return;
-  }
+updateDropdowns();
 
-  const costPer1k = basePrice + PROFIT_PER_1K;
-  const cost = (quantity / 1000) * costPer1k;
+// === PLACE ORDER ===
+document.getElementById('orderBtn').addEventListener('click', async ()=>{
+  const service = getService();
+  const link = document.getElementById('link').value;
+  const quantity = parseInt(quantityEl.value);
 
-  if (cost > balance) {
-    response.innerText = "❌ Not enough balance!";
-    return;
-  }
+  if(!link || !quantity || !service) return alert('Missing info');
 
-  response.innerText = "Processing...";
-
-  const res = await fetch("/api/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      service: serviceId,
-      link: link,
-      quantity: quantity
-    })
+  const res = await fetch('/api/order', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({service: service.id, link, quantity})
   });
 
   const data = await res.json();
-
-  if (data.order) {
-    balance -= cost;
-    response.innerHTML = `✅ Order placed! ID: ${data.order} <br> New Balance: $${balance.toFixed(2)}`;
-  } else {
-    response.innerText = "❌ Error placing order";
-  }
-}
-
-updatePrice();
+  if(data.error) alert(`Error: ${data.error}`);
+  else alert('Order placed successfully!');
+});
 </script>
-
 </body>
 </html>
