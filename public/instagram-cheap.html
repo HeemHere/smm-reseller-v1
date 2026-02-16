@@ -1,81 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Instagram Followers - HQ Profiles</title>
+  <title>Instagram Services</title>
   <style>
-    body {
-      background: #111;
-      font-family: Arial;
-      color: white;
-      text-align: center;
-      padding: 40px;
-    }
-    input {
-      padding: 10px;
-      width: 300px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      border: none;
-    }
-    .btn {
-      margin: 8px;
-      padding: 12px 20px;
-      background: #ff2e63;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-    }
-    .btn:hover { background: #ff4f7a; }
+    body { background: #0f0f0f; font-family: Arial; color: white; text-align: center; padding: 40px; }
+    select, input { padding: 10px; margin: 8px; width: 300px; border-radius: 8px; border: none; }
+    button { padding: 12px 20px; background: #ff2e63; border: none; border-radius: 8px; color: white; cursor: pointer; }
+    button:hover { background: #ff4f7a; }
+    #price, #response { margin-top: 15px; }
   </style>
 </head>
 <body>
 
-<h2>Instagram Followers – HQ Profiles</h2>
+<h2>Instagram Services</h2>
 
-<input type="text" id="link" placeholder="Enter Instagram URL" />
+<select id="serviceType">
+  <option value="8959" data-price="1.33" data-min="30" data-max="100000">Followers — Real & Old Accounts (No Refill)</option>
+  <option value="8960" data-price="1.55" data-min="30" data-max="100000">Followers — Real & Old Accounts (30 Days Refill)</option>
+  <option value="8954" data-price="1.20" data-min="100" data-max="10000">Followers — HQ Accounts 10K</option>
+  <option value="8955" data-price="1.21" data-min="100" data-max="20000">Followers — HQ Accounts 20K</option>
+  <option value="8917" data-price="1.10" data-min="100" data-max="10000000">Likes — Profile Photo Accounts</option>
+  <option value="8923" data-price="1.077" data-min="10" data-max="5000000">Likes — HQ Profiles</option>
+  <option value="8901" data-price="1.45" data-min="50" data-max="10000">Comments — Random Real Accounts</option>
+</select>
+
 <br>
 
-<div id="packages"></div>
+<input type="text" id="link" placeholder="Enter Instagram URL">
+<br>
+<input type="number" id="quantity" placeholder="Enter Quantity">
 
+<br><br>
+<button onclick="placeOrder()">Place Order</button>
+
+<p id="price"></p>
 <p id="response"></p>
 
 <script>
-const packages = [
-  { qty: 1000, price: 2 },
-  { qty: 2000, price: 4 },
-  { qty: 5000, price: 9 },
-  { qty: 10000, price: 17 },
-  { qty: 20000, price: 32 },
-  { qty: 50000, price: 75 },
-  { qty: 100000, price: 140 }
-];
+const PROFIT_PER_1K = 1; // your added $1 profit
 
-// auto select correct service ID based on quantity
-function getServiceId(qty) {
-  if (qty <= 10000) return "8950";
-  if (qty <= 20000) return "8951";
-  if (qty <= 30000) return "8952";
-  return "8953";
+let balance = 50; // example balance, can later connect Stripe/payments
+
+const serviceSelect = document.getElementById("serviceType");
+const quantityInput = document.getElementById("quantity");
+const priceEl = document.getElementById("price");
+
+function updatePrice() {
+  const qty = parseInt(quantityInput.value) || 0;
+  const option = serviceSelect.selectedOptions[0];
+  const basePrice = parseFloat(option.dataset.price);
+  const costPer1k = basePrice + PROFIT_PER_1K;
+  const cost = (qty / 1000) * costPer1k;
+  priceEl.innerText = `Cost: $${cost.toFixed(2)}`;
 }
 
-const container = document.getElementById("packages");
+quantityInput.addEventListener("input", updatePrice);
+serviceSelect.addEventListener("change", updatePrice);
 
-packages.forEach(pkg => {
-  const btn = document.createElement("button");
-  btn.className = "btn";
-  btn.innerText = `${pkg.qty.toLocaleString()} - $${pkg.price}`;
-  btn.onclick = () => order(pkg.qty);
-  container.appendChild(btn);
-});
+async function placeOrder() {
+  const option = serviceSelect.selectedOptions[0];
+  const serviceId = option.value;
+  const basePrice = parseFloat(option.dataset.price);
+  const minQty = parseInt(option.dataset.min);
+  const maxQty = parseInt(option.dataset.max);
 
-async function order(quantity) {
   const link = document.getElementById("link").value;
-  const serviceId = getServiceId(quantity);
+  const quantity = parseInt(quantityInput.value);
   const response = document.getElementById("response");
 
-  if (!link) {
-    response.innerText = "Enter link first!";
+  if (!link || !quantity) {
+    response.innerText = "❌ Fill everything!";
+    return;
+  }
+
+  if (quantity < minQty || quantity > maxQty) {
+    response.innerText = `❌ Quantity must be between ${minQty} and ${maxQty}`;
+    return;
+  }
+
+  const costPer1k = basePrice + PROFIT_PER_1K;
+  const cost = (quantity / 1000) * costPer1k;
+
+  if (cost > balance) {
+    response.innerText = "❌ Not enough balance!";
     return;
   }
 
@@ -94,11 +101,14 @@ async function order(quantity) {
   const data = await res.json();
 
   if (data.order) {
-    response.innerHTML = `✅ Order ID: ${data.order}`;
+    balance -= cost;
+    response.innerHTML = `✅ Order placed! ID: ${data.order} <br> New Balance: $${balance.toFixed(2)}`;
   } else {
     response.innerText = "❌ Error placing order";
   }
 }
+
+updatePrice();
 </script>
 
 </body>
