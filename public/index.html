@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMM Reseller</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #1f1f1f;
+      padding: 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    h1 { text-align: center; margin-bottom: 20px; }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input { background: #2c2c2c; color: #fff; }
+    button {
+      background: #ff3c3c;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover { background: #ff5757; }
+    .response { margin-top: 15px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Order SMM Service</h1>
+    <input type="number" id="serviceId" placeholder="Enter Service ID" />
+    <input type="text" id="link" placeholder="Enter Instagram URL" />
+    <input type="number" id="quantity" placeholder="Enter Quantity" />
+    <button onclick="placeOrder()">Place Order</button>
+    <div class="response" id="response"></div>
+  </div>
 
+  <script>
+    async function placeOrder() {
+      const serviceId = document.getElementById('serviceId').value;
+      const link = document.getElementById('link').value;
+      const quantity = document.getElementById('quantity').value;
+      const responseDiv = document.getElementById('response');
+
+      if (!serviceId || !link || !quantity) {
+        responseDiv.innerText = "Please enter service ID, link, and quantity!";
+        return;
+      }
+
+      responseDiv.innerText = "Processing...";
+
+      try {
+        const res = await fetch('/api/order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ service: serviceId, link, quantity })
+        });
+
+        const data = await res.json();
+        if (data.order) {
+          responseDiv.innerHTML = `✅ Order placed! ID: <b>${data.order}</b>`;
+        } else if (data.error) {
+          responseDiv.innerText = `❌ Error: ${data.error}`;
+        } else {
+          responseDiv.innerText = `❌ Unexpected response`;
+        }
+      } catch (err) {
+        responseDiv.innerText = `❌ Network error: ${err.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
