@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DCPYnet</title>
+  <title>DCPYnet | Premium SMM Services</title>
   <style>
     :root {
       --bg: #000;
       --text: #fff;
       --subtext: #bfbfbf;
-      --green: #00c46b; /* money green */
+      --green: #00c46b;
       --card-bg: rgba(13,13,13,0.85);
       --border: #1a1a1a;
       --radius: 14px;
@@ -76,9 +76,11 @@
     }
 
     .dropdown-content {
-      display: none;
+      max-height: 0;
+      overflow: hidden;
       margin-top: 15px;
       text-align: left;
+      transition: max-height 0.3s ease;
     }
 
     .dropdown-content a {
@@ -102,8 +104,8 @@
 <div class="main-content">
   <header><span>DCPYnet</span></header>
 
-  <div class="dropdown" onclick="toggleDropdown()">
-    <h3>SMM Services</h3>
+  <div class="dropdown" id="dropdownBox">
+    <h3 onclick="toggleDropdown()">SMM Services</h3>
     <div class="dropdown-content" id="services-dropdown">
       <a href="instagram-cheap.html">Instagram services</a>
       <a href="facebook.html">Facebook services</a>
@@ -115,10 +117,23 @@
 </div>
 
 <script>
+const dropdown = document.getElementById('services-dropdown');
+const dropdownBox = document.getElementById('dropdownBox');
+
 function toggleDropdown() {
-  const dropdown = document.getElementById('services-dropdown');
-  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  if (dropdown.style.maxHeight && dropdown.style.maxHeight !== "0px") {
+    dropdown.style.maxHeight = "0";
+  } else {
+    dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+  }
 }
+
+// Close if clicking outside
+document.addEventListener('click', function(e) {
+  if (!dropdownBox.contains(e.target)) {
+    dropdown.style.maxHeight = "0";
+  }
+});
 
 // Snake background
 const canvas = document.getElementById('snake-bg');
