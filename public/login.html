@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DCPYnet | Login</title>
+  <title>DCPYnet Login</title>
   <style>
     body {
       background: black;
       color: white;
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -48,21 +48,6 @@
       font-weight: bold;
       cursor: pointer;
     }
-
-    button:hover {
-      opacity: 0.85;
-    }
-
-    p {
-      margin-top: 15px;
-      color: #aaa;
-      font-size: 0.9rem;
-    }
-
-    a {
-      color: #00c46b;
-      text-decoration: none;
-    }
   </style>
 </head>
 <body>
@@ -73,17 +58,21 @@
   <input id="email" type="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
 
-  <button onclick="login()">Login</button>
-
-  <p>
-    No account? <a href="register.html">Register</a>
-  </p>
+  <button id="loginBtn">Login</button>
 </div>
 
 <script>
-async function login() {
+document.getElementById("loginBtn").addEventListener("click", async () => {
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Enter email + password");
+    return;
+  }
+
+  console.log("Logging in...");
 
   const res = await fetch("/api/login", {
     method: "POST",
@@ -92,19 +81,17 @@ async function login() {
   });
 
   const data = await res.json();
+  console.log("Response:", data);
 
   if (data.success) {
-    // Save user session in browser
     localStorage.setItem("user", JSON.stringify(data.user));
-
     alert("Login successful!");
 
-    // Redirect to dashboard
-    window.location.href = "/index.html";
+    window.location.href = "/dashboard.html";
   } else {
     alert("Login failed: " + data.error);
   }
-}
+});
 </script>
 
 </body>
