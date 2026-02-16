@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const params = new URLSearchParams();
     params.append("key", API_KEY);
     params.append("action", "add");
-    params.append("service", "1"); // 🔥 CHANGE THIS to your real service ID
+    params.append("service", "8950"); // ✅ your real service ID
     params.append("link", link);
     params.append("quantity", quantity);
 
