@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   const API_KEY = process.env.API_KEY;
 
   // Replace with your SMM panel API URL
-  const PANEL_URL = "https://yourpanel.com/api/v2";
+  const PANEL_URL = "https://lionfollow.com/api/v2";
 
   const response = await fetch(PANEL_URL, {
     method: "POST",
