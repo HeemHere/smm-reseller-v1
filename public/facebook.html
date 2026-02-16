@@ -1,167 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Facebook Services</title>
-  <style>
-    :root {
-      --bg: #000;
-      --text: #fff;
-      --subtext: #bfbfbf;
-      --green: #00c46b;
-      --card-bg: #0d0d0d;
-      --border: #1a1a1a;
-      --radius: 12px;
-      --transition: 0.25s ease;
-      font-family: 'Inter', sans-serif;
-    }
+<meta charset="UTF-8">
+<title>dcpynet - Facebook</title>
+<style>
+:root {
+  --bg: #000;
+  --text: #fff;
+  --subtext: #bfbfbf;
+  --green: #00c46b;
+  --card-bg: #0d0d0d;
+  --border: #1a1a1a;
+  --radius: 14px;
+  font-family: 'Inter', sans-serif;
+}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
+body {
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+}
 
-    h1 {
-      text-align: center;
-      color: var(--green);
-      margin-bottom: 30px;
-    }
+header {
+  text-align:center;
+  padding:50px 20px;
+  font-size:3rem;
+  font-weight:700;
+}
+header span { color: var(--green); }
 
-    label {
-      display: block;
-      margin: 10px 0 5px;
-    }
+.container { max-width:600px; margin:auto; padding:20px; }
+label { display:block; margin-top:20px; font-weight:600; }
+select, input { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:none; font-size:1rem; }
+button { margin-top:20px; padding:15px; width:100%; border:none; border-radius:8px; background:var(--green); color:#000; font-weight:700; cursor:pointer; font-size:1rem; }
 
-    select, input {
-      padding: 8px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      color: var(--text);
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 15px;
-    }
-
-    button {
-      background: var(--green);
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-
-    button:hover {
-      filter: brightness(1.2);
-    }
-
-    #total {
-      margin-top: 10px;
-      font-weight: 600;
-      color: var(--green);
-    }
-  </style>
+#total { margin-top:10px; font-weight:600; color: var(--green); }
+</style>
 </head>
 <body>
 
-<h1>Facebook Services</h1>
-
-<form id="fb-form">
-  <label for="category">Service</label>
-  <select id="category" required>
-    <option value="" disabled selected>Select Service</option>
+<header><span>dcpynet</span> Facebook</header>
+<div class="container">
+  <label>Category</label>
+  <select id="category">
     <option value="followers">Followers</option>
     <option value="reactions">Reactions</option>
   </select>
 
-  <label for="quality">Quality / Type</label>
-  <select id="quality" required>
-    <option value="" disabled selected>Select Type</option>
-    <option value="normal">Normal</option>
-    <option value="hidden">Hidden Data</option>
-  </select>
+  <label>Quality</label>
+  <select id="quality"></select>
 
-  <label for="refill">Refill</label>
-  <select id="refill" required>
-    <option value="no">No Refill</option>
-    <option value="30">30 Days Refill</option>
-  </select>
+  <label>Refill</label>
+  <select id="refill"></select>
 
-  <label for="link">Link / Page URL</label>
-  <input type="text" id="link" placeholder="Enter Page or Post URL" required>
+  <label>Quantity</label>
+  <input type="number" id="quantity" min="1" value="100">
 
-  <label for="quantity">Quantity</label>
-  <input type="number" id="quantity" min="10" placeholder="Amount" required>
+  <label>Link</label>
+  <input type="text" id="link" placeholder="Paste page/post link">
 
   <div id="total">Total: $0.00</div>
-
-  <button type="submit">Place Order</button>
-</form>
+  <button id="orderBtn">Place Order</button>
+</div>
 
 <script>
-  // Example Facebook IDs and pricing per 1k
-  const services = {
-    followers: {
-      normal: { no: 1.05, "30": 1.043 },
-      hidden: { no: 1.05, "30": 1.045 }
-    },
-    reactions: {
-      normal: { no: 1.0595, "30": 1.0595 }
-    }
-  };
+// === SERVICE DATA ===
+const services = {
+  followers: [
+    {id:1001, name:"Normal Followers", refill:"No Refill", price:1.05},
+    {id:1002, name:"Normal Followers", refill:"30 Days", price:1.043},
+    {id:1003, name:"Hidden Data", refill:"No Refill", price:1.05}
+  ],
+  reactions: [
+    {id:1010, name:"Like, Love, Wow", refill:"No Refill", price:1.0595},
+    {id:1011, name:"Haha & Angry", refill:"No Refill", price:1.06}
+  ]
+};
 
-  const categoryEl = document.getElementById("category");
-  const qualityEl = document.getElementById("quality");
-  const refillEl = document.getElementById("refill");
-  const quantityEl = document.getElementById("quantity");
-  const totalEl = document.getElementById("total");
-  const form = document.getElementById("fb-form");
+// === POPULATE DROPDOWNS ===
+const categoryEl = document.getElementById('category');
+const qualityEl = document.getElementById('quality');
+const refillEl = document.getElementById('refill');
+const quantityEl = document.getElementById('quantity');
+const totalEl = document.getElementById('total');
 
-  function updateTotal() {
-    const category = categoryEl.value;
-    const quality = qualityEl.value;
-    const refill = refillEl.value;
-    const qty = parseInt(quantityEl.value) || 0;
+function updateDropdowns() {
+  const cat = categoryEl.value;
+  const catServices = services[cat];
+  const qualities = [...new Set(catServices.map(s=>s.name))];
+  qualityEl.innerHTML = qualities.map(q=>`<option value="${q}">${q}</option>`).join('');
+  updateRefill();
+}
 
-    if (services[category] && services[category][quality] && services[category][quality][refill]) {
-      const pricePer1k = services[category][quality][refill];
-      const total = (pricePer1k * (qty/1000)).toFixed(2);
-      totalEl.textContent = `Total: $${total}`;
-    } else {
-      totalEl.textContent = `Total: $0.00`;
-    }
-  }
+function updateRefill() {
+  const cat = categoryEl.value;
+  const qual = qualityEl.value;
+  const catServices = services[cat].filter(s=>s.name===qual);
+  const refills = [...new Set(catServices.map(s=>s.refill))];
+  refillEl.innerHTML = refills.map(r=>`<option value="${r}">${r}</option>`).join('');
+  updateTotal();
+}
 
-  categoryEl.addEventListener("change", updateTotal);
-  qualityEl.addEventListener("change", updateTotal);
-  refillEl.addEventListener("change", updateTotal);
-  quantityEl.addEventListener("input", updateTotal);
+function getService() {
+  const cat = categoryEl.value;
+  const qual = qualityEl.value;
+  const refill = refillEl.value;
+  const catServices = services[cat].filter(s=>s.name===qual && s.refill===refill);
+  return catServices[0];
+}
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = {
-      service: `${categoryEl.value}-${qualityEl.value}-${refillEl.value}`,
-      link: linkEl.value,
-      quantity: quantityEl.value
-    };
+function updateTotal() {
+  const service = getService();
+  const qty = parseInt(quantityEl.value)||0;
+  const total = service ? (service.price * (qty/1000)).toFixed(2) : 0;
+  totalEl.textContent = `Total: $${total}`;
+}
 
-    const res = await fetch("/api/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
+categoryEl.addEventListener('change', ()=>{ updateDropdowns(); });
+qualityEl.addEventListener('change', ()=>{ updateRefill(); });
+refillEl.addEventListener('change', ()=>{ updateTotal(); });
+quantityEl.addEventListener('input', ()=>{ updateTotal(); });
 
-    const result = await res.json();
-    alert(JSON.stringify(result));
+updateDropdowns();
+
+// === PLACE ORDER ===
+document.getElementById('orderBtn').addEventListener('click', async ()=>{
+  const service = getService();
+  const link = document.getElementById('link').value;
+  const quantity = parseInt(quantityEl.value);
+
+  if(!link || !quantity || !service) return alert('Missing info');
+
+  const res = await fetch('/api/order', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({service: service.id, link, quantity})
   });
-</script>
 
+  const data = await res.json();
+  if(data.error) alert(`Error: ${data.error}`);
+  else alert('Order placed successfully!');
+});
+</script>
 </body>
 </html>
