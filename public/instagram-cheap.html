@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Instagram Followers - HQ Profiles</title>
+  <style>
+    body {
+      background: #111;
+      font-family: Arial;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+    input {
+      padding: 10px;
+      width: 300px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+    }
+    .btn {
+      margin: 8px;
+      padding: 12px 20px;
+      background: #ff2e63;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+    .btn:hover { background: #ff4f7a; }
+  </style>
+</head>
+<body>
+
+<h2>Instagram Followers – HQ Profiles</h2>
+
+<input type="text" id="link" placeholder="Enter Instagram URL" />
+<br>
+
+<div id="packages"></div>
+
+<p id="response"></p>
+
+<script>
+const packages = [
+  { qty: 1000, price: 2 },
+  { qty: 2000, price: 4 },
+  { qty: 5000, price: 9 },
+  { qty: 10000, price: 17 },
+  { qty: 20000, price: 32 },
+  { qty: 50000, price: 75 },
+  { qty: 100000, price: 140 }
+];
+
+// auto select correct service ID based on quantity
+function getServiceId(qty) {
+  if (qty <= 10000) return "8950";
+  if (qty <= 20000) return "8951";
+  if (qty <= 30000) return "8952";
+  return "8953";
+}
+
+const container = document.getElementById("packages");
+
+packages.forEach(pkg => {
+  const btn = document.createElement("button");
+  btn.className = "btn";
+  btn.innerText = `${pkg.qty.toLocaleString()} - $${pkg.price}`;
+  btn.onclick = () => order(pkg.qty);
+  container.appendChild(btn);
+});
+
+async function order(quantity) {
+  const link = document.getElementById("link").value;
+  const serviceId = getServiceId(quantity);
+  const response = document.getElementById("response");
+
+  if (!link) {
+    response.innerText = "Enter link first!";
+    return;
+  }
+
+  response.innerText = "Processing...";
+
+  const res = await fetch("/api/order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      service: serviceId,
+      link: link,
+      quantity: quantity
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.order) {
+    response.innerHTML = `✅ Order ID: ${data.order}`;
+  } else {
+    response.innerText = "❌ Error placing order";
+  }
+}
+</script>
+
+</body>
+</html>
