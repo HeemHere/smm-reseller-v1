@@ -1,155 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>dcpynet - Instagram</title>
-<style>
-:root {
-  --bg: #000;
-  --text: #fff;
-  --subtext: #bfbfbf;
-  --green: #00c46b;
-  --card-bg: #0d0d0d;
-  --border: #1a1a1a;
-  --radius: 14px;
-  font-family: 'Inter', sans-serif;
-}
+  <title>DCPYnet</title>
+  <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --subtext: #bfbfbf;
+      --green: #00c46b; /* money green */
+      --card-bg: rgba(13,13,13,0.85);
+      --border: #1a1a1a;
+      --radius: 14px;
+      --transition: 0.25s ease;
+      font-family: 'Inter', sans-serif;
+    }
 
-body {
-  margin:0;
-  background: var(--bg);
-  color: var(--text);
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      position: relative;
+    }
 
-header {
-  text-align:center;
-  padding:50px 20px;
-  font-size:3rem;
-  font-weight:700;
-}
-header span { color: var(--green); }
+    canvas#snake-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
 
-.container { max-width:600px; margin:auto; padding:20px; }
-label { display:block; margin-top:20px; font-weight:600; }
-select, input { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:none; font-size:1rem; }
-button { margin-top:20px; padding:15px; width:100%; border:none; border-radius:8px; background:var(--green); color:#000; font-weight:700; cursor:pointer; font-size:1rem; }
+    .main-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
 
-#total { margin-top:10px; font-weight:600; color: var(--green); }
-</style>
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    header span {
+      color: var(--green);
+    }
+
+    .dropdown {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      margin: 20px auto;
+      max-width: 400px;
+    }
+
+    .dropdown:hover {
+      border-color: var(--green);
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(0,196,107,0.25);
+    }
+
+    .dropdown h3 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .dropdown-content {
+      display: none;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    .dropdown-content a {
+      display: block;
+      color: var(--text);
+      padding: 8px 0;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: 0.2s;
+    }
+
+    .dropdown-content a:hover {
+      color: var(--green);
+    }
+  </style>
 </head>
 <body>
 
-<header><span>dcpynet</span> Instagram</header>
-<div class="container">
-  <label>Category</label>
-  <select id="category">
-    <option value="followers">Followers</option>
-    <option value="likes">Likes</option>
-    <option value="comments">Comments</option>
-  </select>
+<canvas id="snake-bg"></canvas>
 
-  <label>Quality</label>
-  <select id="quality"></select>
+<div class="main-content">
+  <header><span>DCPYnet</span></header>
 
-  <label>Refill</label>
-  <select id="refill"></select>
-
-  <label>Quantity</label>
-  <input type="number" id="quantity" min="1" value="100">
-
-  <label>Link</label>
-  <input type="text" id="link" placeholder="Paste post/profile link">
-
-  <div id="total">Total: $0.00</div>
-  <button id="orderBtn">Place Order</button>
+  <div class="dropdown" onclick="toggleDropdown()">
+    <h3>SMM Services</h3>
+    <div class="dropdown-content" id="services-dropdown">
+      <a href="instagram-followers-hq-profiles.html">Instagram Followers (HQ Profiles)</a>
+      <a href="instagram-followers-hq-accounts.html">Instagram Followers (HQ Accounts)</a>
+      <a href="instagram-likes.html">Instagram Likes</a>
+      <a href="facebook-followers.html">Facebook Followers</a>
+      <a href="facebook-reactions.html">Facebook Reactions</a>
+      <a href="tiktok-likes.html">TikTok Likes</a>
+      <a href="tiktok-followers.html">TikTok Followers</a>
+      <a href="whatsapp-group-members.html">WhatsApp Group Members</a>
+      <a href="telegram-followers.html">Telegram Followers</a>
+    </div>
+  </div>
 </div>
 
 <script>
-// === SERVICE DATA ===
-const services = {
-  followers: [
-    {id:8950, name:"HQ Profiles", refill:"No Refill", price:1.21},
-    {id:8951, name:"HQ Profiles", refill:"No Refill", price:1.22},
-    {id:8959, name:"Real & Old +7-15 Posts", refill:"No Refill", price:1.33},
-    {id:8960, name:"Real & Old +7-15 Posts", refill:"30 Days", price:1.55},
-    {id:8933, name:"HQ Accounts", refill:"No Refill", price:1.31},
-    {id:8934, name:"HQ Accounts", refill:"No Refill", price:1.32}
-  ],
-  likes: [
-    {id:8923, name:"HQ Profiles", refill:"No Refill", price:1.077},
-    {id:8917, name:"Profile Photos", refill:"No Refill", price:1.10}
-  ],
-  comments: [
-    {id:8901, name:"Random", refill:"No Refill", price:1.45},
-    {id:8904, name:"Custom", refill:"No Refill", price:1.52}
-  ]
-};
-
-// === POPULATE QUALITY & REFILL DROPDOWNS ===
-const categoryEl = document.getElementById('category');
-const qualityEl = document.getElementById('quality');
-const refillEl = document.getElementById('refill');
-const quantityEl = document.getElementById('quantity');
-const totalEl = document.getElementById('total');
-
-function updateDropdowns() {
-  const cat = categoryEl.value;
-  const catServices = services[cat];
-  // unique qualities
-  const qualities = [...new Set(catServices.map(s=>s.name))];
-  qualityEl.innerHTML = qualities.map(q=>`<option value="${q}">${q}</option>`).join('');
-  updateRefill();
+function toggleDropdown() {
+  const dropdown = document.getElementById('services-dropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
 
-function updateRefill() {
-  const cat = categoryEl.value;
-  const qual = qualityEl.value;
-  const catServices = services[cat].filter(s=>s.name===qual);
-  const refills = [...new Set(catServices.map(s=>s.refill))];
-  refillEl.innerHTML = refills.map(r=>`<option value="${r}">${r}</option>`).join('');
-  updateTotal();
+// Snake background
+const canvas = document.getElementById('snake-bg');
+const ctx = canvas.getContext('2d');
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+
+class SnakeLine {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.vx = (Math.random() - 0.5) * 2;
+    this.vy = (Math.random() - 0.5) * 2;
+    this.length = 50 + Math.random() * 100;
+    this.history = [];
+    this.color = '#00c46b';
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.history.push({x: this.x, y: this.y});
+    if(this.history.length > this.length) this.history.shift();
+    if(this.x < 0 || this.x > width) this.vx *= -1;
+    if(this.y < 0 || this.y > height) this.vy *= -1;
+  }
+  draw(ctx) {
+    ctx.beginPath();
+    for(let i=0;i<this.history.length-1;i++){
+      const p1=this.history[i],p2=this.history[i+1];
+      ctx.strokeStyle=this.color;
+      ctx.lineWidth=2;
+      ctx.moveTo(p1.x,p1.y);
+      ctx.lineTo(p2.x,p2.y);
+    }
+    ctx.stroke();
+  }
 }
 
-function getService() {
-  const cat = categoryEl.value;
-  const qual = qualityEl.value;
-  const refill = refillEl.value;
-  const catServices = services[cat].filter(s=>s.name===qual && s.refill===refill);
-  return catServices[0]; // first match
+const snakes = [];
+for(let i=0;i<30;i++) snakes.push(new SnakeLine());
+
+function animate() {
+  ctx.fillStyle = 'rgba(0,0,0,0.15)';
+  ctx.fillRect(0,0,width,height);
+  snakes.forEach(s=>{ s.update(); s.draw(ctx); });
+  requestAnimationFrame(animate);
 }
+animate();
 
-function updateTotal() {
-  const service = getService();
-  const qty = parseInt(quantityEl.value)||0;
-  const total = service ? (service.price * (qty/1000)).toFixed(2) : 0;
-  totalEl.textContent = `Total: $${total}`;
-}
-
-categoryEl.addEventListener('change', ()=>{ updateDropdowns(); });
-qualityEl.addEventListener('change', ()=>{ updateRefill(); });
-refillEl.addEventListener('change', ()=>{ updateTotal(); });
-quantityEl.addEventListener('input', ()=>{ updateTotal(); });
-
-updateDropdowns();
-
-// === PLACE ORDER ===
-document.getElementById('orderBtn').addEventListener('click', async ()=>{
-  const service = getService();
-  const link = document.getElementById('link').value;
-  const quantity = parseInt(quantityEl.value);
-
-  if(!link || !quantity || !service) return alert('Missing info');
-
-  const res = await fetch('/api/order', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({service: service.id, link, quantity})
-  });
-
-  const data = await res.json();
-  if(data.error) alert(`Error: ${data.error}`);
-  else alert('Order placed successfully!');
+window.addEventListener('resize', ()=>{
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
 });
 </script>
+
 </body>
 </html>
