@@ -1,77 +1,148 @@
-<section>
-  <h2>Instagram</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='instagram-followers-hq-profiles.html'">
-      <h3>Followers (HQ Profiles)</h3>
-      <p>Fast delivery, cheap price</p>
-    </div>
-    <div class="card" onclick="location.href='instagram-followers-hq-accounts.html'">
-      <h3>Followers (HQ Accounts)</h3>
-      <p>Best price & quality</p>
-    </div>
-    <div class="card" onclick="location.href='instagram-likes.html'">
-      <h3>Likes</h3>
-      <p>Boost posts fast</p>
-    </div>
-    <div class="card" onclick="location.href='instagram-comments.html'">
-      <h3>Comments</h3>
-      <p>Custom or random</p>
-    </div>
-  </div>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SMM Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #111;
+  --text: #fff;
+  --subtext: #aaa;
+  --accent: #00c46b;
+  --card-bg: #1c1c1c;
+  --card-border: #333;
+  --radius: 12px;
+  --transition: 0.3s;
+  font-family: 'Inter', sans-serif;
+}
 
-<section>
-  <h2>Facebook</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='facebook-followers.html'">
-      <h3>Followers</h3>
-      <p>Grow your pages quickly</p>
-    </div>
-    <div class="card" onclick="location.href='facebook-reactions.html'">
-      <h3>Reactions</h3>
-      <p>Like, Love, Wow, Haha</p>
-    </div>
-  </div>
-</section>
+body {
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+}
 
-<section>
-  <h2>TikTok</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='tiktok-likes.html'">
-      <h3>Likes</h3>
-      <p>Real account engagement</p>
-    </div>
-    <div class="card" onclick="location.href='tiktok-followers.html'">
-      <h3>Followers</h3>
-      <p>Boost your profile fast</p>
-    </div>
-  </div>
-</section>
+header {
+  text-align: center;
+  padding: 60px 20px 40px;
+  font-size: 3rem;
+  font-weight: 700;
+}
 
-<section>
-  <h2>WhatsApp</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='whatsapp-group-members.html'">
-      <h3>Group Members</h3>
-      <p>Increase group reach</p>
-    </div>
-    <div class="card" onclick="location.href='whatsapp-likes.html'">
-      <h3>Likes</h3>
-      <p>Reactions & engagement</p>
-    </div>
-  </div>
-</section>
+header span { color: var(--accent); }
 
-<section>
-  <h2>Telegram</h2>
-  <div class="container">
-    <div class="card" onclick="location.href='telegram-followers.html'">
-      <h3>Followers</h3>
-      <p>Grow channels quickly</p>
-    </div>
-    <div class="card" onclick="location.href='telegram-likes.html'">
-      <h3>Likes</h3>
-      <p>Boost posts & channels</p>
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 25px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 25px rgba(0,196,107,0.3);
+}
+
+.card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.dropdown {
+  display: none;
+  margin-top: 15px;
+  text-align: left;
+}
+
+.dropdown a {
+  display: block;
+  padding: 5px 0;
+  color: var(--subtext);
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.dropdown a:hover {
+  color: var(--accent);
+}
+
+</style>
+</head>
+<body>
+
+<header><span>SMM</span> Services</header>
+
+<div class="container">
+
+  <div class="card" onclick="toggleDropdown('instagram')">
+    <h3>Instagram Services</h3>
+    <div id="instagram" class="dropdown">
+      <a href="instagram-followers-hq-profiles.html">Followers (HQ Profiles)</a>
+      <a href="instagram-followers-hq-accounts.html">Followers (HQ Accounts)</a>
+      <a href="instagram-likes.html">Likes</a>
+      <a href="instagram-comments.html">Comments</a>
     </div>
   </div>
-</section>
+
+  <div class="card" onclick="toggleDropdown('facebook')">
+    <h3>Facebook Services</h3>
+    <div id="facebook" class="dropdown">
+      <a href="facebook-followers.html">Followers</a>
+      <a href="facebook-reactions.html">Reactions</a>
+    </div>
+  </div>
+
+  <div class="card" onclick="toggleDropdown('tiktok')">
+    <h3>TikTok Services</h3>
+    <div id="tiktok" class="dropdown">
+      <a href="tiktok-likes.html">Likes</a>
+      <a href="tiktok-followers.html">Followers</a>
+    </div>
+  </div>
+
+  <div class="card" onclick="toggleDropdown('whatsapp')">
+    <h3>WhatsApp Services</h3>
+    <div id="whatsapp" class="dropdown">
+      <a href="whatsapp-group-members.html">Group Members</a>
+      <a href="whatsapp-likes.html">Likes</a>
+    </div>
+  </div>
+
+  <div class="card" onclick="toggleDropdown('telegram')">
+    <h3>Telegram Services</h3>
+    <div id="telegram" class="dropdown">
+      <a href="telegram-followers.html">Followers</a>
+      <a href="telegram-likes.html">Likes</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleDropdown(id) {
+  const dropdown = document.getElementById(id);
+  const allDropdowns = document.querySelectorAll('.dropdown');
+  allDropdowns.forEach(d => {
+    if(d !== dropdown) d.style.display = 'none';
+  });
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
