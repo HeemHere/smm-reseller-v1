@@ -50,13 +50,13 @@
       color: var(--green);
     }
 
-    /* TOP RIGHT BALANCE + LOGOUT */
+    /* TOP RIGHT */
     #topRight {
       position: absolute;
       top: 20px;
       right: 30px;
       display: flex;
-      gap: 15px;
+      gap: 10px;
       align-items: center;
     }
 
@@ -64,6 +64,15 @@
       color: var(--green);
       font-weight: bold;
       font-size: 1rem;
+    }
+
+    /* REFRESH BUTTON */
+    #refreshBtn {
+      background: none;
+      border: none;
+      color: var(--green);
+      font-size: 20px;
+      cursor: pointer;
     }
 
     #logoutBtn {
@@ -76,7 +85,7 @@
       color: black;
     }
 
-    /* DROPDOWN BOX */
+    /* DROPDOWN */
     .dropdown {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -135,13 +144,17 @@
   <header>
     <span>DCPYnet</span>
 
+    <!-- BALANCE + REFRESH + LOGOUT -->
     <div id="topRight">
       <span id="balanceText"></span>
+
+      <button id="refreshBtn" onclick="refreshBalance()">↻</button>
+
       <button id="logoutBtn">Logout</button>
     </div>
   </header>
 
-  <!-- SERVICES DROPDOWN -->
+  <!-- SERVICES -->
   <div class="dropdown" onclick="toggleDropdown()">
     <h3>SMM Services</h3>
 
@@ -155,7 +168,11 @@
       <hr>
 
       <a href="add-funds.html">💳 Add Funds</a>
-      <a href="admin.html">🛠 Admin Approvals</a>
+      <a href="my-deposits.html">📥 My Deposits</a>
+
+      <hr>
+
+      <a href="admin-login.html">🛠 Admin Approvals</a>
     </div>
   </div>
 
@@ -163,15 +180,30 @@
 
 <script>
 /* LOGIN REQUIRED */
-const user = JSON.parse(localStorage.getItem("user"));
+let user = JSON.parse(localStorage.getItem("user"));
 
 if (!user) {
   window.location.href = "/login.html";
 }
 
 /* SHOW BALANCE */
-document.getElementById("balanceText").innerText =
-  "Balance: $" + user.balance;
+function showBalance() {
+  document.getElementById("balanceText").innerText =
+    "Balance: $" + user.balance;
+}
+showBalance();
+
+/* REFRESH BALANCE */
+async function refreshBalance() {
+  const res = await fetch("/api/balance?email=" + user.email);
+  const data = await res.json();
+
+  user.balance = data.balance;
+  localStorage.setItem("user", JSON.stringify(user));
+
+  showBalance();
+  alert("Balance Updated ✅");
+}
 
 /* LOGOUT */
 document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -247,11 +279,6 @@ function animate() {
 }
 
 animate();
-
-window.addEventListener("resize", () => {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-});
 </script>
 
 </body>
