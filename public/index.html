@@ -2,243 +2,81 @@
 <html>
 <head>
   <title>DCPYnet</title>
-
   <style>
-    :root {
-      --bg: #000;
-      --text: #fff;
-      --green: #00c46b;
-      --card-bg: rgba(13,13,13,0.85);
-      --border: #1a1a1a;
-      --radius: 14px;
-      font-family: 'Inter', sans-serif;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    canvas#snake-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-
-    .main-content {
-      position: relative;
-      z-index: 1;
-      max-width: 1200px;
-      margin: auto;
-      padding: 40px 20px;
-    }
-
-    header {
-      position: relative;
-      text-align: center;
-      padding: 60px 20px 30px;
-      font-size: 3rem;
-      font-weight: 700;
-      letter-spacing: -1px;
-    }
-
-    header span {
-      color: var(--green);
-    }
-
-    /* TOP RIGHT LOGIN + BALANCE */
-    #topRight {
-      position: absolute;
-      top: 25px;
-      right: 30px;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-
-    #loginBtn {
-      padding: 8px 16px;
-      border-radius: 10px;
-      background: var(--green);
-      color: black;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    #loginBtn:hover {
-      opacity: 0.8;
-    }
-
-    #balanceText {
-      color: var(--green);
-      font-weight: bold;
-      font-size: 1rem;
-    }
-
-    /* SERVICE DROPDOWN BOX */
-    .dropdown {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      cursor: pointer;
-      transition: 0.25s ease;
-      text-align: center;
-      margin: 40px auto;
-      max-width: 400px;
-    }
-
-    .dropdown:hover {
-      border-color: var(--green);
-      transform: translateY(-4px);
-      box-shadow: 0 0 20px rgba(0,196,107,0.25);
-    }
-
-    .dropdown h3 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-
-    .dropdown-content {
-      display: none;
-      margin-top: 15px;
-      text-align: left;
-    }
-
-    .dropdown-content a {
-      display: block;
+    body {
+      background: black;
       color: white;
-      padding: 10px 0;
-      text-decoration: none;
-      border-bottom: 1px solid var(--border);
-      transition: 0.2s;
+      font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
     }
 
-    .dropdown-content a:hover {
-      color: var(--green);
+    .box {
+      background: #111;
+      padding: 50px;
+      border-radius: 15px;
+      border: 1px solid #222;
+      width: 420px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    h1 span {
+      color: #00c46b;
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    a {
+      display: block;
+      margin: 12px 0;
+      padding: 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .login {
+      background: #00c46b;
+      color: black;
+    }
+
+    .register {
+      border: 2px solid #00c46b;
+      color: #00c46b;
+    }
+
+    a:hover {
+      opacity: 0.85;
     }
   </style>
 </head>
-
 <body>
 
-<canvas id="snake-bg"></canvas>
+<div class="box">
+  <h1><span>DCPY</span>net</h1>
+  <p>Private SMM Dashboard — Login Required</p>
 
-<div class="main-content">
-
-  <header>
-    <span>DCPYnet</span>
-
-    <!-- LOGIN + BALANCE -->
-    <div id="topRight">
-      <a href="/login.html" id="loginBtn">Login</a>
-      <span id="balanceText"></span>
-    </div>
-  </header>
-
-  <!-- SERVICES DROPDOWN -->
-  <div class="dropdown" onclick="toggleDropdown()">
-    <h3>SMM Services</h3>
-
-    <div class="dropdown-content" id="services-dropdown">
-      <a href="instagram-cheap.html">Instagram Services</a>
-      <a href="facebook.html">Facebook Services</a>
-      <a href="tiktok.html">TikTok Services</a>
-      <a href="whatsapp.html">WhatsApp Services</a>
-      <a href="telegram.html">Telegram Services</a>
-    </div>
-  </div>
-
+  <a class="login" href="/login.html">Login</a>
+  <a class="register" href="/register.html">Create Account</a>
 </div>
 
 <script>
-/* DROPDOWN TOGGLE */
-function toggleDropdown() {
-  const dropdown = document.getElementById("services-dropdown");
-  dropdown.style.display =
-    dropdown.style.display === "block" ? "none" : "block";
-}
-
-/* SHOW BALANCE IF LOGGED IN */
+/* Auto redirect if already logged in */
 const user = JSON.parse(localStorage.getItem("user"));
-
 if (user) {
-  document.getElementById("loginBtn").style.display = "none";
-  document.getElementById("balanceText").innerText =
-    "Balance: $" + user.balance;
+  window.location.href = "/dashboard.html";
 }
-
-/* SNAKE BACKGROUND */
-const canvas = document.getElementById("snake-bg");
-const ctx = canvas.getContext("2d");
-
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-
-class SnakeLine {
-  constructor() { this.reset(); }
-
-  reset() {
-    this.x = Math.random() * width;
-    this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 2;
-    this.vy = (Math.random() - 0.5) * 2;
-    this.length = 60 + Math.random() * 120;
-    this.history = [];
-    this.color = "#00c46b";
-  }
-
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-
-    this.history.push({ x: this.x, y: this.y });
-    if (this.history.length > this.length) this.history.shift();
-
-    if (this.x < 0 || this.x > width) this.vx *= -1;
-    if (this.y < 0 || this.y > height) this.vy *= -1;
-  }
-
-  draw() {
-    ctx.beginPath();
-    for (let i = 0; i < this.history.length - 1; i++) {
-      const p1 = this.history[i];
-      const p2 = this.history[i + 1];
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 2;
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
-    }
-    ctx.stroke();
-  }
-}
-
-const snakes = [];
-for (let i = 0; i < 25; i++) snakes.push(new SnakeLine());
-
-function animate() {
-  ctx.fillStyle = "rgba(0,0,0,0.15)";
-  ctx.fillRect(0, 0, width, height);
-
-  snakes.forEach(s => {
-    s.update();
-    s.draw();
-  });
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-window.addEventListener("resize", () => {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-});
 </script>
 
 </body>
