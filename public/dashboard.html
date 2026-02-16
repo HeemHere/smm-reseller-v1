@@ -17,10 +17,10 @@
     html, body {
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
       height: 100%;
       background: var(--bg);
       color: var(--text);
+      overflow-x: hidden;
     }
 
     canvas#snake-bg {
@@ -53,7 +53,7 @@
     /* TOP RIGHT BALANCE + LOGOUT */
     #topRight {
       position: absolute;
-      top: 25px;
+      top: 20px;
       right: 30px;
       display: flex;
       gap: 15px;
@@ -76,21 +76,17 @@
       color: black;
     }
 
-    #logoutBtn:hover {
-      opacity: 0.85;
-    }
-
-    /* SERVICE DROPDOWN BOX */
+    /* DROPDOWN BOX */
     .dropdown {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 22px;
       cursor: pointer;
-      transition: 0.25s ease;
       text-align: center;
-      margin: 40px auto;
-      max-width: 400px;
+      margin: 50px auto;
+      max-width: 420px;
+      transition: 0.25s ease;
     }
 
     .dropdown:hover {
@@ -101,7 +97,7 @@
 
     .dropdown h3 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
     }
 
     .dropdown-content {
@@ -112,14 +108,20 @@
 
     .dropdown-content a {
       display: block;
-      color: white;
       padding: 10px 0;
       text-decoration: none;
-      border-bottom: 1px solid var(--border);
+      color: white;
+      border-bottom: 1px solid #222;
+      font-size: 1rem;
     }
 
     .dropdown-content a:hover {
       color: var(--green);
+    }
+
+    hr {
+      border: 1px solid #222;
+      margin: 12px 0;
     }
   </style>
 </head>
@@ -133,7 +135,6 @@
   <header>
     <span>DCPYnet</span>
 
-    <!-- BALANCE + LOGOUT -->
     <div id="topRight">
       <span id="balanceText"></span>
       <button id="logoutBtn">Logout</button>
@@ -150,13 +151,18 @@
       <a href="tiktok.html">TikTok Services</a>
       <a href="whatsapp.html">WhatsApp Services</a>
       <a href="telegram.html">Telegram Services</a>
+
+      <hr>
+
+      <a href="add-funds.html">💳 Add Funds</a>
+      <a href="admin.html">🛠 Admin Approvals</a>
     </div>
   </div>
 
 </div>
 
 <script>
-/* 🔒 LOGIN REQUIRED */
+/* LOGIN REQUIRED */
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (!user) {
@@ -167,13 +173,13 @@ if (!user) {
 document.getElementById("balanceText").innerText =
   "Balance: $" + user.balance;
 
-/* LOGOUT BUTTON */
+/* LOGOUT */
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("user");
   window.location.href = "/index.html";
 });
 
-/* DROPDOWN TOGGLE */
+/* DROPDOWN */
 function toggleDropdown() {
   const dropdown = document.getElementById("services-dropdown");
   dropdown.style.display =
