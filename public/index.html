@@ -7,10 +7,10 @@
       --bg: #000;
       --text: #fff;
       --subtext: #bfbfbf;
-      --green: #00c46b; /* money green */
-      --card-bg: #0d0d0d;
-      --border: #1a1a1a;
-      --radius: 14px;
+      --green: #00c46b;
+      --card-bg: #111;
+      --border: #222;
+      --radius: 12px;
       --transition: 0.25s ease;
       font-family: 'Inter', sans-serif;
     }
@@ -35,69 +35,56 @@
 
     section {
       padding: 40px 20px;
-      max-width: 1200px;
+      max-width: 1000px;
       margin: auto;
     }
 
     section h2 {
-      text-align: center;
       font-size: 2rem;
-      margin-bottom: 40px;
+      margin-bottom: 25px;
       font-weight: 600;
       color: var(--green);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
     }
 
     .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 30px 20px;
+      padding: 20px;
+      flex: 1 1 200px;
+      min-width: 200px;
       text-align: center;
       cursor: pointer;
       transition: var(--transition);
-      position: relative;
     }
 
     .card:hover {
       border-color: var(--green);
-      transform: translateY(-6px);
-      box-shadow: 0 0 25px rgba(0, 196, 107, 0.25);
+      box-shadow: 0 0 20px rgba(0, 196, 107, 0.25);
+      transform: translateY(-4px);
     }
 
     .card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 10px;
+      font-size: 1.15rem;
+      margin-bottom: 8px;
       font-weight: 600;
     }
 
     .card p {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--subtext);
-    }
-
-    /* subtle green glow on hover */
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, transparent, rgba(0, 196, 107, 0.15));
-      opacity: 0;
-      transition: var(--transition);
-    }
-
-    .card:hover::after {
-      opacity: 1;
+      margin: 0;
     }
   </style>
 </head>
-
 <body>
 
 <header><span>SMM</span> Services</header>
