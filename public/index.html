@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SMM Services</title>
+  <title>🚀 SMM Services</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
       font-family: 'Arial', sans-serif;
       color: white;
       background: black;
@@ -17,38 +17,50 @@
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 0; /* behind the content */
+      z-index: 0; 
     }
 
     header {
       text-align: center;
       padding: 40px 20px;
-      font-size: 2em;
+      font-size: 2.5em;
       font-weight: bold;
       position: relative;
       z-index: 2;
       color: #fff;
     }
 
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 40px 10px;
-      gap: 30px;
+    section {
+      padding: 40px 20px;
       position: relative;
       z-index: 2;
     }
 
+    section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2em;
+      border-bottom: 2px solid #fff;
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
     .card {
-      background: rgba(0, 0, 0, 0.8); /* more opaque so text is readable */
+      background: rgba(0, 0, 0, 0.8);
       border-radius: 15px;
-      width: 250px;
-      padding: 30px 20px;
+      width: 220px;
+      padding: 25px 15px;
       text-align: center;
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      border: 1px solid #fff; /* white border for contrast */
+      border: 1px solid #fff;
     }
 
     .card:hover {
@@ -56,14 +68,14 @@
       box-shadow: 0 10px 20px rgba(255,255,255,0.3);
     }
 
-    .card h2 {
-      font-size: 1.3em;
-      margin-bottom: 10px;
+    .card h3 {
+      font-size: 1.2em;
+      margin-bottom: 8px;
       color: #fff;
     }
 
     .card p {
-      font-size: 1em;
+      font-size: 0.95em;
       color: #ccc;
     }
   </style>
@@ -74,32 +86,88 @@
 
 <header>🚀 SMM Services</header>
 
-<div class="container">
-  <div class="card" onclick="location.href='instagram-cheap.html'">
-    <h2>Instagram Followers (HQ Profiles)</h2>
-    <p>Fast & Cheap</p>
+<!-- Instagram Section -->
+<section>
+  <h2>Instagram</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='instagram-followers-hq-profiles.html'">
+      <h3>Followers (HQ Profiles)</h3>
+      <p>Fast & Cheap</p>
+    </div>
+    <div class="card" onclick="location.href='instagram-followers-hq-accounts.html'">
+      <h3>Followers (HQ Accounts)</h3>
+      <p>Best Price & Quality</p>
+    </div>
+    <div class="card" onclick="location.href='instagram-likes.html'">
+      <h3>Likes</h3>
+      <p>Boost posts fast</p>
+    </div>
+    <div class="card" onclick="location.href='instagram-comments.html'">
+      <h3>Comments</h3>
+      <p>Custom or Random</p>
+    </div>
   </div>
+</section>
 
-  <div class="card" onclick="location.href='instagram.html'">
-    <h2>Instagram Followers (HQ Accounts)</h2>
-    <p>Best Price & Quality</p>
+<!-- Facebook Section -->
+<section>
+  <h2>Facebook</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='facebook-followers.html'">
+      <h3>Followers</h3>
+      <p>Grow pages fast</p>
+    </div>
+    <div class="card" onclick="location.href='facebook-reactions.html'">
+      <h3>Reactions</h3>
+      <p>Like, Love, Wow, Haha</p>
+    </div>
   </div>
+</section>
 
-  <div class="card" onclick="location.href='facebook-reactions.html'">
-    <h2>Facebook Reactions</h2>
-    <p>Like, Love, Wow & more</p>
+<!-- TikTok Section -->
+<section>
+  <h2>TikTok</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='tiktok-likes.html'">
+      <h3>Likes</h3>
+      <p>Real account likes</p>
+    </div>
+    <div class="card" onclick="location.href='tiktok-followers.html'">
+      <h3>Followers</h3>
+      <p>Boost your profile</p>
+    </div>
   </div>
+</section>
 
-  <div class="card" onclick="location.href='facebook-followers.html'">
-    <h2>Facebook Followers</h2>
-    <p>Grow your pages</p>
+<!-- WhatsApp Section -->
+<section>
+  <h2>WhatsApp</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='whatsapp-group-members.html'">
+      <h3>Group Members</h3>
+      <p>Boost your groups</p>
+    </div>
+    <div class="card" onclick="location.href='whatsapp-likes.html'">
+      <h3>Likes</h3>
+      <p>Reactions & engagement</p>
+    </div>
   </div>
+</section>
 
-  <div class="card" onclick="location.href='tiktok-likes.html'">
-    <h2>TikTok Likes</h2>
-    <p>Fast real likes</p>
+<!-- Telegram Section -->
+<section>
+  <h2>Telegram</h2>
+  <div class="container">
+    <div class="card" onclick="location.href='telegram-followers.html'">
+      <h3>Followers</h3>
+      <p>Grow channels fast</p>
+    </div>
+    <div class="card" onclick="location.href='telegram-likes.html'">
+      <h3>Likes</h3>
+      <p>Boost posts & channels</p>
+    </div>
   </div>
-</div>
+</section>
 
 <script>
   const canvas = document.getElementById("matrix");
@@ -116,12 +184,11 @@
   for (let x = 0; x < columns; x++) drops[x] = 1;
 
   function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // subtle trail
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     for (let i = 0; i < drops.length; i++) {
       const text = letters[Math.floor(Math.random() * letters.length)];
-      // randomize black or white for each drop
       ctx.fillStyle = Math.random() > 0.5 ? "#fff" : "#000";
       ctx.font = fontSize + "px monospace";
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
