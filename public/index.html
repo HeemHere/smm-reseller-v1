@@ -1,155 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>DCPYNET</title>
-<style>
-  :root {
-    --bg: #000;
-    --text: #fff;
-    --subtext: #bfbfbf;
-    --green: #00c46b;
-    --card-bg: rgba(0,0,0,0.7);
-    --border: #1a1a1a;
-    --radius: 14px;
-    --transition: 0.25s ease;
-    font-family: 'Inter', sans-serif;
-  }
+  <title>DCPYnet</title>
+  <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --subtext: #bfbfbf;
+      --green: #00c46b; /* money green */
+      --card-bg: rgba(13,13,13,0.85);
+      --border: #1a1a1a;
+      --radius: 14px;
+      --transition: 0.25s ease;
+      font-family: 'Inter', sans-serif;
+    }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    color: var(--text);
-    background: #000;
-  }
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      position: relative;
+    }
 
-  canvas#snake-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
+    canvas#snake-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
 
-  header {
-    text-align: center;
-    padding: 60px 20px 30px;
-    font-size: 3rem;
-    font-weight: 700;
-    letter-spacing: -1px;
-  }
+    .main-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
 
-  header span {
-    color: var(--green);
-  }
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
 
-  .brand-box {
-    max-width: 500px;
-    margin: 40px auto;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    text-align: center;
-    padding: 30px;
-    cursor: pointer;
-    transition: var(--transition);
-  }
+    header span {
+      color: var(--green);
+    }
 
-  .brand-box:hover {
-    border-color: var(--green);
-    box-shadow: 0 0 25px rgba(0,196,107,0.25);
-    transform: translateY(-5px);
-  }
+    .dropdown {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      margin: 20px auto;
+      max-width: 400px;
+    }
 
-  .brand-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
+    .dropdown:hover {
+      border-color: var(--green);
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(0,196,107,0.25);
+    }
 
-  .dropdown {
-    display: none;
-    margin-top: 20px;
-    text-align: left;
-  }
+    .dropdown h3 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
 
-  .dropdown h3 {
-    font-size: 1.2rem;
-    margin-bottom: 5px;
-    color: var(--green);
-  }
+    .dropdown-content {
+      display: none;
+      margin-top: 15px;
+      text-align: left;
+    }
 
-  .dropdown a {
-    display: block;
-    text-decoration: none;
-    color: var(--text);
-    background: rgba(0,0,0,0.5);
-    padding: 8px 12px;
-    margin-bottom: 5px;
-    border-radius: 8px;
-    transition: 0.2s;
-  }
+    .dropdown-content a {
+      display: block;
+      color: var(--text);
+      padding: 8px 0;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: 0.2s;
+    }
 
-  .dropdown a:hover {
-    background: rgba(0,196,107,0.2);
-  }
-
-</style>
+    .dropdown-content a:hover {
+      color: var(--green);
+    }
+  </style>
 </head>
 <body>
 
 <canvas id="snake-bg"></canvas>
 
-<header><span>DCPYNET</span></header>
+<div class="main-content">
+  <header><span>DCPYnet</span></header>
 
-<div class="brand-box" onclick="toggleDropdown()">
-  <div class="brand-title">SMM Services</div>
-  <p>Click to see options</p>
-
-  <div class="dropdown" id="dropdown-menu">
-    <h3>Instagram</h3>
-    <a href="instagram-followers-hq-profiles.html">Followers (HQ Profiles) - Fast & Cheap</a>
-    <a href="instagram-followers-hq-accounts.html">Followers (HQ Accounts) - Best Price & Quality</a>
-    <a href="instagram-likes.html">Likes - Boost posts fast</a>
-    <a href="instagram-comments.html">Comments - Custom or Random</a>
-
-    <h3>Facebook</h3>
-    <a href="facebook-followers.html">Followers - Grow pages fast</a>
-    <a href="facebook-reactions.html">Reactions - Like, Love, Wow, Haha</a>
-
-    <h3>TikTok</h3>
-    <a href="tiktok-likes.html">Likes - Real account likes</a>
-    <a href="tiktok-followers.html">Followers - Boost your profile</a>
-
-    <h3>WhatsApp</h3>
-    <a href="whatsapp-group-members.html">Group Members - Boost your groups</a>
-    <a href="whatsapp-likes.html">Likes - Reactions & engagement</a>
-
-    <h3>Telegram</h3>
-    <a href="telegram-followers.html">Followers - Grow channels fast</a>
-    <a href="telegram-likes.html">Likes - Boost posts & channels</a>
+  <div class="dropdown" onclick="toggleDropdown()">
+    <h3>SMM Services</h3>
+    <div class="dropdown-content" id="services-dropdown">
+      <a href="instagram-followers-hq-profiles.html">Instagram Followers (HQ Profiles)</a>
+      <a href="instagram-followers-hq-accounts.html">Instagram Followers (HQ Accounts)</a>
+      <a href="instagram-likes.html">Instagram Likes</a>
+      <a href="facebook-followers.html">Facebook Followers</a>
+      <a href="facebook-reactions.html">Facebook Reactions</a>
+      <a href="tiktok-likes.html">TikTok Likes</a>
+      <a href="tiktok-followers.html">TikTok Followers</a>
+      <a href="whatsapp-group-members.html">WhatsApp Group Members</a>
+      <a href="telegram-followers.html">Telegram Followers</a>
+    </div>
   </div>
 </div>
 
 <script>
-function toggleDropdown(){
-  const menu = document.getElementById('dropdown-menu');
-  menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+function toggleDropdown() {
+  const dropdown = document.getElementById('services-dropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
 
-// Snake-line background
+// Snake background
 const canvas = document.getElementById('snake-bg');
 const ctx = canvas.getContext('2d');
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
 class SnakeLine {
-  constructor() {
-    this.reset();
-  }
-
+  constructor() { this.reset(); }
   reset() {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
@@ -159,42 +141,39 @@ class SnakeLine {
     this.history = [];
     this.color = '#00c46b';
   }
-
   update() {
     this.x += this.vx;
     this.y += this.vy;
-    this.history.push({x:this.x, y:this.y});
+    this.history.push({x: this.x, y: this.y});
     if(this.history.length > this.length) this.history.shift();
     if(this.x < 0 || this.x > width) this.vx *= -1;
     if(this.y < 0 || this.y > height) this.vy *= -1;
   }
-
   draw(ctx) {
     ctx.beginPath();
     for(let i=0;i<this.history.length-1;i++){
-      const p1 = this.history[i];
-      const p2 = this.history[i+1];
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 2;
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
+      const p1=this.history[i],p2=this.history[i+1];
+      ctx.strokeStyle=this.color;
+      ctx.lineWidth=2;
+      ctx.moveTo(p1.x,p1.y);
+      ctx.lineTo(p2.x,p2.y);
     }
     ctx.stroke();
   }
 }
 
 const snakes = [];
-for(let i=0;i<25;i++) snakes.push(new SnakeLine());
+for(let i=0;i<30;i++) snakes.push(new SnakeLine());
 
-function animate(){
+function animate() {
   ctx.fillStyle = 'rgba(0,0,0,0.15)';
   ctx.fillRect(0,0,width,height);
-  snakes.forEach(s=>{s.update(); s.draw(ctx);});
+  snakes.forEach(s=>{ s.update(); s.draw(ctx); });
   requestAnimationFrame(animate);
 }
 animate();
 
-window.addEventListener('resize',()=>{
+window.addEventListener('resize', ()=>{
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
 });
