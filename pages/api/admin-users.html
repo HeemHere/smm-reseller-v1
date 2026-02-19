@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DCPYnet Admin - Users</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial;
+      padding: 40px;
+    }
+
+    h1 { color: #00c46b; }
+
+    table {
+      width: 100%;
+      margin-top: 25px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #222;
+    }
+
+    th { color: #00c46b; }
+
+    input {
+      width: 80px;
+      padding: 6px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      background: #00c46b;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Admin User Balances</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Balance</th>
+      <th>Total Deposited</th>
+      <th>Total Spent</th>
+      <th>Adjust</th>
+    </tr>
+  </thead>
+  <tbody id="users"></tbody>
+</table>
+
+<script>
+if (localStorage.getItem("admin") !== "true") {
+  window.location.href = "/admin-login.html";
+}
+
+async function loadUsers() {
+  const res = await fetch("/api/admin-users");
+  const data = await res.json();
+
+  const tbody = document.getElementById("users");
+  tbody.innerHTML = "";
+
+  data.users.forEach(u => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${u.email}</td>
+        <td>$${u.balance}</td>
+        <td>$${u.total_deposited}</td>
+        <td>$${u.total_spent}</td>
+        <td>
+          <input id="amt-${u.email}" placeholder="+10">
+          <button onclick="adjust('${u.email}')">Update</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+async function adjust(email) {
+  const amt = document.getElementById("amt-" + email).value;
+
+  await fetch("/api/admin-adjust-balance", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ email, amount: amt })
+  });
+
+  alert("Balance Updated ✅");
+  loadUsers();
+}
+
+loadUsers();
+</script>
+
+</body>
+</html>
