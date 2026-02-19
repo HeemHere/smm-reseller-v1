@@ -1,155 +1,245 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>DCPYnet | Facebook Services</title>
-  <style>
-    body {
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
+<meta charset="UTF-8">
+<title>DCPYnet - Facebook Services</title>
 
-    h1 {
-      color: #00c46b;
-    }
+<style>
+:root {
+  --bg:#000;
+  --text:#fff;
+  --green:#00c46b;
+  font-family:Arial;
+}
 
-    .card {
-      background: #111;
-      padding: 30px;
-      max-width: 500px;
-      margin: auto;
-      border-radius: 12px;
-      border: 1px solid #1a1a1a;
-    }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
 
-    select, input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      background: #000;
-      color: #fff;
-      border: 1px solid #333;
-      border-radius: 6px;
-    }
+header {
+  text-align:center;
+  padding:50px;
+  font-size:2.8rem;
+  font-weight:800;
+}
+header span {color:var(--green);}
 
-    button {
-      background: #00c46b;
-      color: #000;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-    }
+.container {
+  max-width:650px;
+  margin:auto;
+  padding:25px;
+}
 
-    button:hover {
-      opacity: 0.85;
-    }
+label {
+  display:block;
+  margin-top:18px;
+  font-weight:bold;
+}
 
-    .price {
-      margin-top: 15px;
-      font-weight: bold;
-      color: #00c46b;
-    }
-  </style>
+select,input {
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+}
+
+button {
+  margin-top:25px;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:10px;
+  background:var(--green);
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#total {
+  margin-top:15px;
+  font-weight:bold;
+  color:var(--green);
+}
+</style>
 </head>
+
 <body>
 
-<h1>Facebook Services</h1>
+<header><span>DCPYnet</span> Facebook</header>
 
-<div class="card">
+<div class="container">
 
-  <select id="serviceSelect"></select>
+<label>Category</label>
+<select id="category">
+  <option value="followers">Followers</option>
+  <option value="likes">Post Likes</option>
+  <option value="reactions">Reactions</option>
+  <option value="shares">Shares</option>
+  <option value="group">Group Members</option>
+  <option value="comments">Comments</option>
+</select>
 
-  <input type="text" id="link" placeholder="Facebook Post / Profile Link">
+<label>Quality</label>
+<select id="quality"></select>
 
-  <input type="number" id="quantity" placeholder="Quantity" min="100">
+<label id="refillLabel" style="display:none;">Refill</label>
+<select id="refill" style="display:none;"></select>
 
-  <div class="price" id="priceDisplay">Total: $0.00</div>
+<label>Quantity</label>
+<input type="number" id="quantity" value="1000">
 
-  <button onclick="placeOrder()">Place Order</button>
+<label>Link</label>
+<input type="text" id="link" placeholder="Paste Facebook link">
+
+<div id="total">Total: $0.00</div>
+
+<button id="orderBtn">Place Order</button>
 
 </div>
 
 <script>
+const services = {
 
-// 🔥 EDIT THIS WHEN YOU GET NEW IDs
-const services = [
-  {
-    id: 2001,
-    name: "Facebook Followers | HQ | No Refill",
-    price: 1.20
-  },
-  {
-    id: 2002,
-    name: "Facebook Followers | HQ | 30 Day Refill",
-    price: 1.45
-  },
-  {
-    id: 2003,
-    name: "Facebook Post Likes | Cheap | No Refill",
-    price: 0.80
-  }
-];
+followers: [
+  {id:8945, name:"Hidden Data Followers", refill:"", price:1.55},
+  {id:8947, name:"Hidden Data Followers", refill:"30 Days", price:1.545},
+  {id:8894, name:"Real & Bot Followers", refill:"", price:1.567},
+  {id:8895, name:"Real & Bot Followers", refill:"30 Days", price:1.576},
+],
 
-// Populate dropdown
-const select = document.getElementById("serviceSelect");
+likes: [
+  {id:8836, name:"HQ Post Likes", refill:"", price:1.1088},
+  {id:8837, name:"HQ Post Likes", refill:"30 Days", price:1.1148},
+  {id:8840, name:"HQ Post Likes", refill:"365 Days", price:1.129},
+  {id:8841, name:"HQ Post Likes", refill:"Lifetime", price:1.129},
+],
 
-services.forEach(service => {
-  const option = document.createElement("option");
-  option.value = service.id;
-  option.textContent = `${service.name} — $${service.price}/1000`;
-  select.appendChild(option);
-});
+reactions: [
+  {id:8938, name:"Reaction Like", refill:"", price:1.576},
+  {id:8939, name:"Reaction Love", refill:"", price:1.576},
+  {id:8940, name:"Reaction Care", refill:"", price:1.576},
+  {id:8941, name:"Reaction Wow", refill:"", price:1.576},
+  {id:8942, name:"Reaction Haha", refill:"", price:1.576},
+  {id:8943, name:"Reaction Sad", refill:"", price:1.576},
+  {id:8944, name:"Reaction Angry", refill:"", price:1.576},
 
-// Price calculation
-document.getElementById("quantity").addEventListener("input", updatePrice);
-select.addEventListener("change", updatePrice);
+  {id:8803, name:"HQ Reaction Like", refill:"", price:1.0965},
+  {id:8804, name:"HQ Reaction Love", refill:"", price:1.0965},
+  {id:8805, name:"HQ Reaction Care", refill:"", price:1.0965},
+  {id:8806, name:"HQ Reaction Wow", refill:"", price:1.0965},
+],
 
-function updatePrice() {
-  const quantity = document.getElementById("quantity").value;
-  const service = services.find(s => s.id == select.value);
+shares: [
+  {id:8800, name:"Post Shares", refill:"30 Days", price:1.0129},
+  {id:8802, name:"Video Shares", refill:"30 Days", price:1.3955},
+],
 
-  if (!quantity || !service) return;
+group: [
+  {id:8822, name:"HQ Group Members", refill:"", price:1.21},
+  {id:8823, name:"HQ Group Members", refill:"30 Days", price:1.22},
+  {id:8824, name:"HQ Group Members", refill:"365 Days", price:1.25},
+  {id:8825, name:"HQ Group Members", refill:"Lifetime", price:1.26},
+],
 
-  const total = (quantity / 1000) * service.price;
-  document.getElementById("priceDisplay").textContent =
-    "Total: $" + total.toFixed(2);
+comments: [
+  {id:8810, name:"Random Comments HQ", refill:"", price:2.30},
+  {id:8813, name:"Custom Comments HQ", refill:"", price:2.30},
+  {id:8812, name:"Random Comments HQ (Fast)", refill:"", price:2.66},
+  {id:8815, name:"Custom Comments HQ (Fast)", refill:"", price:2.66},
+]
+
+};
+
+// Elements
+const categoryEl=document.getElementById("category");
+const qualityEl=document.getElementById("quality");
+const refillEl=document.getElementById("refill");
+const refillLabel=document.getElementById("refillLabel");
+const qtyEl=document.getElementById("quantity");
+const totalEl=document.getElementById("total");
+
+function updateQuality(){
+  const cat=categoryEl.value;
+  const list=services[cat];
+
+  const qualities=[...new Set(list.map(s=>s.name))];
+  qualityEl.innerHTML=qualities.map(q=>`<option>${q}</option>`).join("");
+
+  updateRefill();
 }
 
-// Place order
-async function placeOrder() {
-  const service = select.value;
-  const link = document.getElementById("link").value;
-  const quantity = document.getElementById("quantity").value;
+function updateRefill(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
 
-  if (!link || !quantity) {
-    alert("Fill in all fields");
-    return;
+  const matches=services[cat].filter(s=>s.name===qual);
+  const refills=[...new Set(matches.map(s=>s.refill).filter(r=>r))];
+
+  if(refills.length===0){
+    refillEl.style.display="none";
+    refillLabel.style.display="none";
+    refillEl.innerHTML="";
+  } else {
+    refillEl.style.display="block";
+    refillLabel.style.display="block";
+    refillEl.innerHTML=refills.map(r=>`<option>${r}</option>`).join("");
   }
 
-  const res = await fetch("/api/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      service,
+  updateTotal();
+}
+
+function getService(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
+  const refill=refillEl.value || "";
+
+  return services[cat].find(s=>s.name===qual && s.refill===refill)
+      || services[cat].find(s=>s.name===qual);
+}
+
+function updateTotal(){
+  const svc=getService();
+  const qty=parseInt(qtyEl.value)||0;
+  const total=(svc.price*(qty/1000)).toFixed(2);
+  totalEl.textContent=`Total: $${total}`;
+}
+
+categoryEl.onchange=updateQuality;
+qualityEl.onchange=updateRefill;
+refillEl.onchange=updateTotal;
+qtyEl.oninput=updateTotal;
+
+updateQuality();
+
+// Place Order
+document.getElementById("orderBtn").onclick=async()=>{
+  const svc=getService();
+  const link=document.getElementById("link").value;
+  const quantity=parseInt(qtyEl.value);
+
+  if(!link) return alert("Enter Facebook link");
+
+  const email=localStorage.getItem("userEmail");
+
+  const res=await fetch("/api/order",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      email,
+      service:svc.id,
       link,
       quantity
     })
   });
 
-  const data = await res.json();
+  const data=await res.json();
 
-  if (data.success) {
-    alert("Order placed successfully!");
-  } else {
-    alert("Order failed.");
-  }
-}
-
+  if(data.error) alert("Error: "+data.error);
+  else alert("Order Placed ✅");
+};
 </script>
 
 </body>
