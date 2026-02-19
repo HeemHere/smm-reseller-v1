@@ -2,260 +2,267 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>dcpynet - Instagram</title>
+<title>DCPYnet - Instagram Services</title>
 
 <style>
 :root {
-  --bg: #000;
-  --text: #fff;
-  --subtext: #bfbfbf;
-  --green: #00c46b;
-  --card-bg: #0d0d0d;
-  --border: #1a1a1a;
-  --radius: 14px;
-  font-family: 'Inter', sans-serif;
+  --bg:#000;
+  --text:#fff;
+  --green:#00c46b;
+  --card:#0d0d0d;
+  font-family:Arial;
 }
 
 body {
   margin:0;
-  background: var(--bg);
-  color: var(--text);
+  background:var(--bg);
+  color:var(--text);
 }
 
 header {
   text-align:center;
-  padding:50px 20px;
-  font-size:3rem;
-  font-weight:700;
+  padding:50px;
+  font-size:2.8rem;
+  font-weight:800;
 }
-header span { color: var(--green); }
+header span {color:var(--green);}
 
 .container {
-  max-width:600px;
+  max-width:650px;
   margin:auto;
-  padding:20px;
+  padding:25px;
 }
 
 label {
   display:block;
-  margin-top:20px;
-  font-weight:600;
+  margin-top:18px;
+  font-weight:bold;
 }
 
-select, input {
+select,input {
   width:100%;
-  padding:10px;
-  margin-top:5px;
-  border-radius:8px;
+  padding:12px;
+  margin-top:6px;
+  border-radius:10px;
   border:none;
   font-size:1rem;
 }
 
 button {
-  margin-top:20px;
-  padding:15px;
+  margin-top:25px;
   width:100%;
+  padding:15px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   background:var(--green);
-  color:#000;
-  font-weight:700;
+  font-weight:bold;
   cursor:pointer;
-  font-size:1rem;
 }
 
 #total {
-  margin-top:10px;
-  font-weight:600;
-  color: var(--green);
-}
-
-#balanceBox {
-  position: fixed;
-  top: 15px;
-  right: 20px;
-  background: #111;
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: 1px solid #333;
-  color: var(--green);
-  font-weight: bold;
+  margin-top:15px;
+  font-weight:bold;
+  color:var(--green);
 }
 </style>
 </head>
 
 <body>
 
-<header><span>dcpynet</span> Instagram</header>
-
-<div id="balanceBox"></div>
+<header><span>DCPYnet</span> Instagram</header>
 
 <div class="container">
 
-  <label>Category</label>
-  <select id="category">
-    <option value="followers">Followers</option>
-    <option value="likes">Likes</option>
-    <option value="comments">Comments</option>
-  </select>
+<label>Category</label>
+<select id="category">
+  <option value="followers">Followers</option>
+  <option value="likes">Likes</option>
+  <option value="comments">Comments</option>
+</select>
 
-  <label>Quality</label>
-  <select id="quality"></select>
+<label>Quality</label>
+<select id="quality"></select>
 
-  <label>Refill</label>
-  <select id="refill"></select>
+<label id="refillLabel" style="display:none;">Refill</label>
+<select id="refill" style="display:none;"></select>
 
-  <label>Quantity</label>
-  <input type="number" id="quantity" min="10" value="100">
+<label>Quantity</label>
+<input type="number" id="quantity" value="1000">
 
-  <label>Link</label>
-  <input type="text" id="link" placeholder="Paste post/profile link">
+<label>Link</label>
+<input type="text" id="link" placeholder="Paste profile/post link">
 
-  <div id="total">Total: $0.00</div>
+<div id="total">Total: $0.00</div>
 
-  <button id="orderBtn">Place Order</button>
+<button id="orderBtn">Place Order</button>
 
 </div>
 
 <script>
-/* 🔒 LOGIN REQUIRED */
-const user = JSON.parse(localStorage.getItem("user"));
-
-if (!user) {
-  window.location.href = "/login.html";
-} else {
-  document.getElementById("balanceBox").innerText =
-    "Balance: $" + user.balance;
-}
-
-/* === SERVICE DATA === */
 const services = {
-  followers: [
-    {id:8950, name:"HQ Profiles", refill:"No Refill", price:1.21},
-    {id:8959, name:"Real & Old +7–15 Posts", refill:"No Refill", price:1.33},
-    {id:8960, name:"Real & Old +7–15 Posts", refill:"30 Days", price:1.55},
-    {id:8933, name:"HQ Accounts", refill:"No Refill", price:1.31}
-  ],
 
-  likes: [
-    {id:8923, name:"HQ Profiles", refill:"No Refill", price:1.08},
-    {id:8917, name:"Profile Photos", refill:"No Refill", price:1.10}
-  ],
+followers: [
 
-  comments: [
-    {id:8901, name:"Random Comments", refill:"No Refill", price:1.45},
-    {id:8904, name:"Custom Comments", refill:"No Refill", price:1.52}
-  ]
+  // 🇧🇷 Brazil Followers
+  {id:4631, name:"Brazil Followers", refill:"", price:2.50},
+
+  // HQ Profiles Cheapest
+  {id:8950, name:"HQ Profiles", refill:"", price:1.21},
+  {id:8951, name:"HQ Profiles", refill:"", price:1.22},
+  {id:8952, name:"HQ Profiles", refill:"", price:1.23},
+  {id:8953, name:"HQ Profiles", refill:"", price:1.24},
+
+  // HQ Accounts Best Price
+  {id:8954, name:"HQ Accounts", refill:"", price:1.22},
+  {id:8955, name:"HQ Accounts", refill:"", price:1.23},
+  {id:8956, name:"HQ Accounts", refill:"", price:1.24},
+  {id:8957, name:"HQ Accounts", refill:"", price:1.24},
+  {id:8958, name:"HQ Accounts", refill:"", price:1.25},
+
+  // Real + Old Accounts (7–15 Posts)
+  {id:8959, name:"Real & Old (7–15 Posts)", refill:"", price:1.33},
+  {id:8960, name:"Real & Old (7–15 Posts)", refill:"30 Days", price:1.55},
+  {id:8961, name:"Real & Old (7–15 Posts)", refill:"60 Days", price:1.66},
+  {id:8962, name:"Real & Old (7–15 Posts)", refill:"90 Days", price:1.77},
+  {id:8963, name:"Real & Old (7–15 Posts)", refill:"365 Days", price:1.88},
+  {id:8964, name:"Real & Old (7–15 Posts)", refill:"Lifetime", price:1.95},
+
+  // Female Accounts
+  {id:8971, name:"Female Real Profiles", refill:"", price:1.90},
+
+  // Old Active Users Drop 10–15%
+  {id:8967, name:"Old Active Users", refill:"", price:1.37},
+  {id:8968, name:"Old Active Users", refill:"30 Days", price:1.48},
+
+  // Real + Bot Accounts
+  {id:8970, name:"Real + Bot Accounts", refill:"", price:1.70},
+
+  // Non Drop Real Accounts
+  {id:8910, name:"Real Accounts Non Drop", refill:"", price:1.42},
+  {id:8911, name:"Real Accounts Non Drop", refill:"30 Days", price:1.50},
+  {id:8912, name:"Real Accounts Non Drop", refill:"60 Days", price:1.55},
+  {id:8913, name:"Real Accounts Non Drop", refill:"90 Days", price:1.60},
+  {id:8914, name:"Real Accounts Non Drop", refill:"365 Days", price:1.62},
+  {id:8915, name:"Real Accounts Non Drop", refill:"Lifetime", price:1.65},
+],
+
+likes: [
+  {id:8923, name:"HQ Likes", refill:"", price:1.08},
+  {id:8924, name:"HQ Likes", refill:"30 Days", price:1.07},
+  {id:8925, name:"HQ Likes", refill:"60 Days", price:1.08},
+  {id:8926, name:"HQ Likes", refill:"90 Days", price:1.08},
+  {id:8927, name:"HQ Likes", refill:"365 Days", price:1.09},
+  {id:8928, name:"HQ Likes", refill:"Lifetime", price:1.09},
+
+  {id:8917, name:"Profile Photo Likes", refill:"", price:1.10},
+  {id:8918, name:"Profile Photo Likes", refill:"30 Days", price:1.11},
+  {id:8919, name:"Profile Photo Likes", refill:"60 Days", price:1.12},
+  {id:8920, name:"Profile Photo Likes", refill:"90 Days", price:1.13},
+  {id:8921, name:"Profile Photo Likes", refill:"365 Days", price:1.14},
+  {id:8922, name:"Profile Photo Likes", refill:"Lifetime", price:1.15},
+],
+
+comments: [
+  {id:8901, name:"Random Comments", refill:"", price:1.45},
+  {id:8902, name:"Random Comments", refill:"", price:1.50},
+  {id:8903, name:"Random Comments", refill:"30 Days", price:1.55},
+
+  {id:8904, name:"Custom Comments", refill:"", price:1.52},
+  {id:8905, name:"Custom Comments", refill:"", price:1.57},
+]
+
 };
 
-/* === DROPDOWNS === */
-const categoryEl = document.getElementById("category");
-const qualityEl = document.getElementById("quality");
-const refillEl = document.getElementById("refill");
-const quantityEl = document.getElementById("quantity");
-const totalEl = document.getElementById("total");
+// Elements
+const categoryEl=document.getElementById("category");
+const qualityEl=document.getElementById("quality");
+const refillEl=document.getElementById("refill");
+const refillLabel=document.getElementById("refillLabel");
+const qtyEl=document.getElementById("quantity");
+const totalEl=document.getElementById("total");
 
-function updateDropdowns() {
-  const cat = categoryEl.value;
-  const catServices = services[cat];
+function updateQuality(){
+  const cat=categoryEl.value;
+  const list=services[cat];
 
-  const qualities = [...new Set(catServices.map(s => s.name))];
-  qualityEl.innerHTML = qualities.map(q =>
-    `<option value="${q}">${q}</option>`
-  ).join("");
+  const qualities=[...new Set(list.map(s=>s.name))];
+  qualityEl.innerHTML=qualities.map(q=>`<option>${q}</option>`).join("");
 
   updateRefill();
 }
 
-function updateRefill() {
-  const cat = categoryEl.value;
-  const qual = qualityEl.value;
+function updateRefill(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
 
-  const filtered = services[cat].filter(s => s.name === qual);
-  const refills = [...new Set(filtered.map(s => s.refill))];
+  const matches=services[cat].filter(s=>s.name===qual);
+  const refills=[...new Set(matches.map(s=>s.refill).filter(r=>r))];
 
-  refillEl.innerHTML = refills.map(r =>
-    `<option value="${r}">${r}</option>`
-  ).join("");
+  if(refills.length===0){
+    refillEl.style.display="none";
+    refillLabel.style.display="none";
+    refillEl.innerHTML="";
+  } else {
+    refillEl.style.display="block";
+    refillLabel.style.display="block";
+    refillEl.innerHTML=refills.map(r=>`<option>${r}</option>`).join("");
+  }
 
   updateTotal();
 }
 
-function getService() {
-  const cat = categoryEl.value;
-  const qual = qualityEl.value;
-  const refill = refillEl.value;
+function getService(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
+  const refill=refillEl.value || "";
 
-  return services[cat].find(
-    s => s.name === qual && s.refill === refill
-  );
+  return services[cat].find(s=>s.name===qual && s.refill===refill)
+      || services[cat].find(s=>s.name===qual);
 }
 
-function updateTotal() {
-  const service = getService();
-  const qty = parseInt(quantityEl.value) || 0;
-
-  const total = service
-    ? (service.price * (qty / 1000)).toFixed(2)
-    : "0.00";
-
-  totalEl.textContent = `Total: $${total}`;
-  return total;
+function updateTotal(){
+  const svc=getService();
+  const qty=parseInt(qtyEl.value)||0;
+  const total=(svc.price*(qty/1000)).toFixed(2);
+  totalEl.textContent=`Total: $${total}`;
 }
 
-/* EVENTS */
-categoryEl.addEventListener("change", updateDropdowns);
-qualityEl.addEventListener("change", updateRefill);
-refillEl.addEventListener("change", updateTotal);
-quantityEl.addEventListener("input", updateTotal);
+categoryEl.onchange=updateQuality;
+qualityEl.onchange=updateRefill;
+refillEl.onchange=updateTotal;
+qtyEl.oninput=updateTotal;
 
-updateDropdowns();
+updateQuality();
 
-/* === PLACE ORDER + BALANCE DEDUCTION === */
-document.getElementById("orderBtn").addEventListener("click", async () => {
-  const service = getService();
-  const link = document.getElementById("link").value;
-  const quantity = parseInt(quantityEl.value);
+// Place Order
+document.getElementById("orderBtn").onclick=async()=>{
+  const svc=getService();
+  const link=document.getElementById("link").value;
+  const quantity=parseInt(qtyEl.value);
 
-  const totalPrice = parseFloat(updateTotal());
+  if(!link) return alert("Enter link");
 
-  if (!service || !link || !quantity) {
-    return alert("Missing info");
-  }
+  const cost=(svc.price*(quantity/1000)).toFixed(2);
 
-  if (user.balance < totalPrice) {
-    return alert("Not enough balance!");
-  }
+  const email=localStorage.getItem("userEmail");
 
-  const res = await fetch("/api/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-
-    body: JSON.stringify({
-      email: user.email,
-      service: service.id,
+  const res=await fetch("/api/order",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      email,
+      service:svc.id,
       link,
       quantity,
-      price: totalPrice
+      cost
     })
   });
 
-  const data = await res.json();
+  const data=await res.json();
 
-  if (data.error) {
-    alert("Error: " + data.error);
-    return;
-  }
-
-  /* UPDATE BALANCE */
-  user.balance = data.newBalance;
-  localStorage.setItem("user", JSON.stringify(user));
-
-  document.getElementById("balanceBox").innerText =
-    "Balance: $" + user.balance;
-
-  alert("Order placed successfully! New Balance: $" + user.balance);
-});
+  if(data.error) alert("Error: "+data.error);
+  else alert("Order Placed ✅");
+};
 </script>
 
 </body>
