@@ -45,34 +45,34 @@
 
 <body>
 
-  <h1>DCPYnet Admin Login</h1>
+<h1>DCPYnet Admin Login</h1>
 
-  <input id="password" type="password" placeholder="Enter admin password">
+<input id="password" type="password" placeholder="Enter admin password">
 
-  <br>
+<br>
 
-  <button onclick="login()">Login</button>
+<button onclick="login()">Login</button>
 
-  <script>
-    async function login() {
-      const password = document.getElementById("password").value;
+<script>
+async function login() {
+  const password = document.getElementById("password").value;
 
-      const res = await fetch("/api/admin-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
+  const res = await fetch("/api/admin-login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password })
+  });
 
-      const data = await res.json();
+  const data = await res.json();
 
-      if (data.success) {
-        localStorage.setItem("admin", "true");
-        window.location.href = "/admin.html";
-      } else {
-        alert("Wrong password");
-      }
-    }
-  </script>
+  if (data.success) {
+    localStorage.setItem("admin", "true");
+    window.location.href = "/admin-dashboard.html";
+  } else {
+    alert("Wrong password");
+  }
+}
+</script>
 
 </body>
 </html>
