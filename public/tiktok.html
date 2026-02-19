@@ -76,6 +76,8 @@ button {
 <label>Category</label>
 <select id="category">
   <option value="followers">Followers</option>
+  <option value="likes">Likes</option>
+  <option value="views">Views</option>
 </select>
 
 <label>Quality</label>
@@ -88,7 +90,7 @@ button {
 <input type="number" id="quantity" value="1000">
 
 <label>Link</label>
-<input type="text" id="link" placeholder="Paste TikTok profile link">
+<input type="text" id="link" placeholder="Paste TikTok link">
 
 <div id="total">Total: $0.00</div>
 
@@ -100,43 +102,24 @@ button {
 const services = {
 
 followers: [
-
-  // HQ Profiles
   {id:6910, name:"HQ Profiles", refill:"90 Days", price:2.74},
-  {id:6911, name:"HQ Profiles", refill:"365 Days", price:2.87},
-  {id:6913, name:"HQ Profiles", refill:"LifeTime", price:3.41},
-
-  // HQ Accounts With Photo
   {id:6861, name:"HQ Accounts With Photo", refill:"365 Days", price:2.96},
-  {id:6863, name:"HQ Accounts With Photo", refill:"LifeTime", price:3.57},
-
-  // Real Accounts SuperFast
   {id:6984, name:"100% Real Accounts SuperFast", refill:"365 Days", price:3.32},
-  {id:6986, name:"100% Real Accounts SuperFast", refill:"LifeTime", price:3.58},
-
-  // Worldwide Real Profiles
   {id:7116, name:"Worldwide Real Profiles", refill:"30 Days", price:3.58},
-  {id:6972, name:"Worldwide Real Profiles", refill:"365 Days", price:3.64},
-  {id:6985, name:"Worldwide Real Profiles", refill:"LifeTime", price:3.83},
-
-  // Low Quality Accounts
-  {id:3412, name:"LQ Accounts", refill:"30 Days", price:2.79},
-  {id:4438, name:"LQ Accounts", refill:"30 Days", price:2.92},
-
-  // Real Active Accounts
-  {id:3798, name:"Real Active Accounts", refill:"LifeTime", price:3.19},
-  {id:4486, name:"Real Active Accounts", refill:"30 Days", price:2.68},
-  {id:4516, name:"Real Active Accounts", refill:"LifeTime", price:2.82},
-
-  // Cheap Real + Bot
-  {id:6121, name:"Real & Bot Profiles", refill:"30 Days", price:2.55},
-
-  // Max 10K Exclusive Small Packs
-  {id:2460, name:"Max 10K Real Accounts", refill:"30 Days", price:2.92},
-
-  // Huge Max 10M Packages
-  {id:8424, name:"Real Accounts (Max 10M)", refill:"365 Days", price:3.08},
   {id:8425, name:"Real Accounts (Max 10M)", refill:"LifeTime", price:3.22},
+],
+
+likes: [
+  {id:7768, name:"Low Quality Likes", refill:"60 Days", price:1.35},
+  {id:3175, name:"Real & Bot Likes", refill:"30 Days", price:1.89},
+  {id:4827, name:"Real Accounts Likes", refill:"90 Days", price:1.61},
+  {id:7849, name:"Best Quality (100% Real)", refill:"60 Days", price:1.92},
+  {id:5894, name:"HQ Accounts Likes", refill:"90 Days", price:2.18},
+  {id:7041, name:"Bulk Likes (Max 50M)", refill:"15 Days", price:2.04},
+],
+
+views: [
+  {id:8307, name:"UltraFast Video Views", refill:"", price:0.50},
 ]
 
 };
@@ -195,6 +178,7 @@ function updateTotal(){
   totalEl.textContent=`Total: $${total}`;
 }
 
+categoryEl.onchange=updateQuality;
 qualityEl.onchange=updateRefill;
 refillEl.onchange=updateTotal;
 qtyEl.oninput=updateTotal;
