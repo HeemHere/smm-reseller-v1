@@ -1,70 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>DCPYnet | Telegram Services</title>
-  <style>
-    body { background:#000; color:#fff; font-family:Arial; text-align:center; padding:40px; }
-    h1 { color:#00c46b; }
-    .card { background:#111; padding:30px; max-width:500px; margin:auto; border-radius:12px; border:1px solid #1a1a1a; }
-    select,input { width:100%; padding:10px; margin:10px 0; background:#000; color:#fff; border:1px solid #333; border-radius:6px; }
-    button { background:#00c46b; color:#000; padding:12px; border:none; border-radius:6px; cursor:pointer; width:100%; font-weight:bold; }
-    .price { margin-top:15px; font-weight:bold; color:#00c46b; }
-  </style>
+<meta charset="UTF-8">
+<title>DCPYnet - Telegram Services</title>
+
+<style>
+:root{
+  --bg:#000;
+  --text:#fff;
+  --green:#00c46b;
+  font-family:Arial;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  text-align:center;
+  padding:50px;
+  font-size:2.8rem;
+  font-weight:800;
+}
+header span{color:var(--green);}
+
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:25px;
+}
+
+label{
+  display:block;
+  margin-top:18px;
+  font-weight:bold;
+}
+
+select,input{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+}
+
+button{
+  margin-top:25px;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:10px;
+  background:var(--green);
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#total{
+  margin-top:15px;
+  font-weight:bold;
+  color:var(--green);
+}
+</style>
 </head>
+
 <body>
 
-<h1>Telegram Services</h1>
+<header><span>DCPYnet</span> Telegram</header>
 
-<div class="card">
-  <select id="serviceSelect"></select>
-  <input type="text" id="link" placeholder="Telegram Channel / Group Link">
-  <input type="number" id="quantity" placeholder="Quantity" min="100">
-  <div class="price" id="priceDisplay">Total: $0.00</div>
-  <button onclick="placeOrder()">Place Order</button>
+<div class="container">
+
+<label>Category</label>
+<select id="category">
+  <option value="hq">HQ Members</option>
+  <option value="lq">LQ / Bot Members</option>
+  <option value="nondrop">Non Drop Members</option>
+  <option value="channel">Channel / Group Members</option>
+</select>
+
+<label>Quality</label>
+<select id="quality"></select>
+
+<label id="refillLabel" style="display:none;">Refill</label>
+<select id="refill" style="display:none;"></select>
+
+<label>Quantity</label>
+<input type="number" id="quantity" value="1000">
+
+<label>Link</label>
+<input type="text" id="link" placeholder="Paste Telegram group/channel link">
+
+<div id="total">Total: $0.00</div>
+
+<button id="orderBtn">Place Order</button>
+
 </div>
 
 <script>
-const services = [
-  { id: 5001, name: "Telegram Members | HQ", price: 1.90 },
-  { id: 5002, name: "Telegram Post Views", price: 0.25 }
-];
+const services = {
 
-const select = document.getElementById("serviceSelect");
+hq: [
+  {id:8887, name:"HQ Members", refill:"", price:1.26},
+  {id:8888, name:"HQ Members", refill:"30 Days", price:1.28},
+  {id:8889, name:"HQ Members", refill:"60 Days", price:1.33},
+  {id:8890, name:"HQ Members", refill:"90 Days", price:1.39},
+  {id:8891, name:"HQ Members", refill:"180 Days", price:1.44},
+  {id:8892, name:"HQ Members", refill:"365 Days", price:1.48},
+  {id:8893, name:"HQ Members", refill:"Lifetime", price:1.52},
+],
 
-services.forEach(service => {
-  const option = document.createElement("option");
-  option.value = service.id;
-  option.textContent = `${service.name} — $${service.price}/1000`;
-  select.appendChild(option);
-});
+lq: [
+  {id:3013, name:"LQ Bot Members", refill:"", price:1.0063},
+  {id:3016, name:"LQ Bot Members", refill:"", price:1.019},
+  {id:179,  name:"LQ Bot Members", refill:"", price:1.0065},
+  {id:5747, name:"LQ Bot Members", refill:"", price:1.009},
+],
 
-document.getElementById("quantity").addEventListener("input", updatePrice);
-select.addEventListener("change", updatePrice);
+nondrop: [
+  {id:6266, name:"HQ Non Drop Members", refill:"", price:1.66},
+  {id:6267, name:"HQ Non Drop Members", refill:"30 Days", price:1.67},
+  {id:6268, name:"HQ Non Drop Members", refill:"60 Days", price:1.68},
+  {id:6269, name:"HQ Non Drop Members", refill:"90 Days", price:1.69},
+  {id:6270, name:"HQ Non Drop Members", refill:"365 Days", price:1.70},
+  {id:6271, name:"HQ Non Drop Members", refill:"Lifetime", price:1.70},
+],
 
-function updatePrice() {
-  const quantity = document.getElementById("quantity").value;
-  const service = services.find(s => s.id == select.value);
-  if (!quantity || !service) return;
-  const total = (quantity / 1000) * service.price;
-  document.getElementById("priceDisplay").textContent = "Total: $" + total.toFixed(2);
+channel: [
+  {id:52,   name:"Channel Members", refill:"", price:1.23},
+  {id:53,   name:"Channel Members", refill:"", price:1.30},
+  {id:3027, name:"Channel Members", refill:"", price:1.539},
+  {id:3019, name:"Zero Drop Channel Members", refill:"", price:1.71},
+  {id:3022, name:"Non Drop Channel Members", refill:"30 Days", price:1.43},
+  {id:3646, name:"Non Drop Channel Members", refill:"Lifetime", price:1.9455},
+]
+
+};
+
+// Elements
+const categoryEl=document.getElementById("category");
+const qualityEl=document.getElementById("quality");
+const refillEl=document.getElementById("refill");
+const refillLabel=document.getElementById("refillLabel");
+const qtyEl=document.getElementById("quantity");
+const totalEl=document.getElementById("total");
+
+function updateQuality(){
+  const cat=categoryEl.value;
+  const list=services[cat];
+
+  const qualities=[...new Set(list.map(s=>s.name))];
+  qualityEl.innerHTML=qualities.map(q=>`<option>${q}</option>`).join("");
+
+  updateRefill();
 }
 
-async function placeOrder() {
-  const service = select.value;
-  const link = document.getElementById("link").value;
-  const quantity = document.getElementById("quantity").value;
+function updateRefill(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
 
-  if (!link || !quantity) return alert("Fill in all fields");
+  const matches=services[cat].filter(s=>s.name===qual);
+  const refills=[...new Set(matches.map(s=>s.refill).filter(r=>r))];
 
-  const res = await fetch("/api/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ service, link, quantity })
+  if(refills.length===0){
+    refillEl.style.display="none";
+    refillLabel.style.display="none";
+    refillEl.innerHTML="";
+  } else {
+    refillEl.style.display="block";
+    refillLabel.style.display="block";
+    refillEl.innerHTML=refills.map(r=>`<option>${r}</option>`).join("");
+  }
+
+  updateTotal();
+}
+
+function getService(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
+  const refill=refillEl.value || "";
+
+  return services[cat].find(s=>s.name===qual && s.refill===refill)
+      || services[cat].find(s=>s.name===qual);
+}
+
+function updateTotal(){
+  const svc=getService();
+  const qty=parseInt(qtyEl.value)||0;
+  const total=(svc.price*(qty/1000)).toFixed(2);
+  totalEl.textContent=`Total: $${total}`;
+}
+
+categoryEl.onchange=updateQuality;
+qualityEl.onchange=updateRefill;
+refillEl.onchange=updateTotal;
+qtyEl.oninput=updateTotal;
+
+updateQuality();
+
+// Place Order
+document.getElementById("orderBtn").onclick=async()=>{
+  const svc=getService();
+  const link=document.getElementById("link").value;
+  const quantity=parseInt(qtyEl.value);
+
+  if(!link) return alert("Enter Telegram link");
+
+  const email=localStorage.getItem("userEmail");
+
+  const res=await fetch("/api/order",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      email,
+      service:svc.id,
+      link,
+      quantity
+    })
   });
 
-  const data = await res.json();
-  alert(data.success ? "Order placed successfully!" : "Order failed.");
-}
+  const data=await res.json();
+
+  if(data.error) alert("Error: "+data.error);
+  else alert("Order Placed ✅");
+};
 </script>
 
 </body>
