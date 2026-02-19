@@ -1,20 +1,78 @@
-<script>
-async function login() {
-  const password = document.getElementById("pass").value;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DCPYnet Admin Login</title>
 
-  const res = await fetch("/api/admin-login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password })
-  });
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 120px;
+    }
 
-  const data = await res.json();
+    h1 {
+      color: #00c46b;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
 
-  if (data.success) {
-    localStorage.setItem("admin", "true");
-    window.location.href = "/admin.html";
-  } else {
-    alert("Wrong password");
-  }
-}
-</script>
+    input {
+      width: 320px;
+      padding: 14px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 350px;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      background: #00c46b;
+      color: black;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>DCPYnet Admin Login</h1>
+
+  <input id="password" type="password" placeholder="Enter admin password">
+
+  <br>
+
+  <button onclick="login()">Login</button>
+
+  <script>
+    async function login() {
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/api/admin-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem("admin", "true");
+        window.location.href = "/admin.html";
+      } else {
+        alert("Wrong password");
+      }
+    }
+  </script>
+
+</body>
+</html>
