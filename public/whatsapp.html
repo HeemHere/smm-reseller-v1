@@ -1,70 +1,207 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>DCPYnet | WhatsApp Services</title>
-  <style>
-    body { background:#000; color:#fff; font-family:Arial; text-align:center; padding:40px; }
-    h1 { color:#00c46b; }
-    .card { background:#111; padding:30px; max-width:500px; margin:auto; border-radius:12px; border:1px solid #1a1a1a; }
-    select,input { width:100%; padding:10px; margin:10px 0; background:#000; color:#fff; border:1px solid #333; border-radius:6px; }
-    button { background:#00c46b; color:#000; padding:12px; border:none; border-radius:6px; cursor:pointer; width:100%; font-weight:bold; }
-    .price { margin-top:15px; font-weight:bold; color:#00c46b; }
-  </style>
+<meta charset="UTF-8">
+<title>DCPYnet - WhatsApp Services</title>
+
+<style>
+:root{
+  --bg:#000;
+  --text:#fff;
+  --green:#00c46b;
+  font-family:Arial;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  text-align:center;
+  padding:50px;
+  font-size:2.8rem;
+  font-weight:800;
+}
+header span{color:var(--green);}
+
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:25px;
+}
+
+label{
+  display:block;
+  margin-top:18px;
+  font-weight:bold;
+}
+
+select,input{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+}
+
+button{
+  margin-top:25px;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:10px;
+  background:var(--green);
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#total{
+  margin-top:15px;
+  font-weight:bold;
+  color:var(--green);
+}
+</style>
 </head>
+
 <body>
 
-<h1>WhatsApp Services</h1>
+<header><span>DCPYnet</span> WhatsApp</header>
 
-<div class="card">
-  <select id="serviceSelect"></select>
-  <input type="text" id="link" placeholder="WhatsApp Group Link">
-  <input type="number" id="quantity" placeholder="Quantity" min="100">
-  <div class="price" id="priceDisplay">Total: $0.00</div>
-  <button onclick="placeOrder()">Place Order</button>
+<div class="container">
+
+<label>Category</label>
+<select id="category">
+  <option value="members">Channel Members</option>
+  <option value="reactions">Post Reactions</option>
+  <option value="auto">Auto Reactions Packages</option>
+</select>
+
+<label>Service Type</label>
+<select id="quality"></select>
+
+<label>Quantity</label>
+<input type="number" id="quantity" value="100">
+
+<label>Link</label>
+<input type="text" id="link" placeholder="Paste WhatsApp channel/post link">
+
+<div id="total">Total: $0.00</div>
+
+<button id="orderBtn">Place Order</button>
+
 </div>
 
 <script>
-const services = [
-  { id: 4001, name: "WhatsApp Group Members | HQ", price: 2.50 },
-  { id: 4002, name: "WhatsApp Channel Followers", price: 2.00 }
-];
+const services = {
 
-const select = document.getElementById("serviceSelect");
+members: [
+  {id:4751, name:"Global Channel Members HQ", price:6.00},
+  {id:4752, name:"Global Channel Members HQ Fast", price:6.555},
+  {id:4803, name:"Indian Channel Members HQ", price:6.75},
+  {id:4804, name:"USA Channel Members HQ", price:4.00},
+  {id:4805, name:"Europe Channel Members HQ", price:4.50},
+],
 
-services.forEach(service => {
-  const option = document.createElement("option");
-  option.value = service.id;
-  option.textContent = `${service.name} — $${service.price}/1000`;
-  select.appendChild(option);
-});
+reactions: [
+  {id:4754, name:"Random Reaction Mix", price:2.50},
+  {id:4753, name:"Like Reaction", price:2.50},
+  {id:4755, name:"Love Reaction", price:3.50},
+  {id:4756, name:"Haha Reaction", price:2.50},
+  {id:4757, name:"Wow Reaction", price:3.50},
+  {id:4758, name:"Sad Reaction", price:2.50},
+  {id:4759, name:"Pray Reaction", price:1.80},
+],
 
-document.getElementById("quantity").addEventListener("input", updatePrice);
-select.addEventListener("change", updatePrice);
+auto: [
+  {id:8741, name:"Mix Auto Reactions (10 Posts)", price:5.20},
+  {id:8742, name:"Mix Auto Reactions (25 Posts)", price:9.40},
+  {id:8743, name:"Mix Auto Reactions (50 Posts)", price:17.80},
+  {id:8744, name:"Mix Auto Reactions (100 Posts)", price:34.60},
+  {id:8745, name:"Mix Auto Reactions (500 Posts)", price:61.00},
 
-function updatePrice() {
-  const quantity = document.getElementById("quantity").value;
-  const service = services.find(s => s.id == select.value);
-  if (!quantity || !service) return;
-  const total = (quantity / 1000) * service.price;
-  document.getElementById("priceDisplay").textContent = "Total: $" + total.toFixed(2);
+  {id:8746, name:"Like Auto Reactions (10 Posts)", price:5.20},
+  {id:8747, name:"Like Auto Reactions (25 Posts)", price:9.40},
+  {id:8748, name:"Like Auto Reactions (50 Posts)", price:17.80},
+  {id:8749, name:"Like Auto Reactions (100 Posts)", price:34.60},
+  {id:8750, name:"Like Auto Reactions (500 Posts)", price:61.00},
+
+  {id:8751, name:"Love Auto Reactions (10 Posts)", price:5.20},
+  {id:8752, name:"Love Auto Reactions (25 Posts)", price:9.40},
+  {id:8753, name:"Love Auto Reactions (50 Posts)", price:17.80},
+  {id:8754, name:"Love Auto Reactions (100 Posts)", price:34.60},
+  {id:8755, name:"Love Auto Reactions (500 Posts)", price:61.00},
+
+  {id:8756, name:"Haha Auto Reactions (10 Posts)", price:5.20},
+  {id:8758, name:"Haha Auto Reactions (50 Posts)", price:17.80},
+  {id:8759, name:"Haha Auto Reactions (100 Posts)", price:34.60},
+  {id:8760, name:"Haha Auto Reactions (500 Posts)", price:61.00},
+]
+
+};
+
+// Elements
+const categoryEl=document.getElementById("category");
+const qualityEl=document.getElementById("quality");
+const qtyEl=document.getElementById("quantity");
+const totalEl=document.getElementById("total");
+
+function updateQuality(){
+  const cat=categoryEl.value;
+  const list=services[cat];
+
+  qualityEl.innerHTML=list.map(s=>
+    `<option value="${s.id}" data-price="${s.price}">
+      ${s.name} ($${s.price}/1k)
+    </option>`
+  ).join("");
+
+  updateTotal();
 }
 
-async function placeOrder() {
-  const service = select.value;
-  const link = document.getElementById("link").value;
-  const quantity = document.getElementById("quantity").value;
+function updateTotal(){
+  const option=qualityEl.selectedOptions[0];
+  const price=parseFloat(option.dataset.price);
+  const qty=parseInt(qtyEl.value)||0;
 
-  if (!link || !quantity) return alert("Fill in all fields");
+  const total=(price*(qty/1000)).toFixed(2);
+  totalEl.textContent=`Total: $${total}`;
+}
 
-  const res = await fetch("/api/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ service, link, quantity })
+categoryEl.onchange=updateQuality;
+qualityEl.onchange=updateTotal;
+qtyEl.oninput=updateTotal;
+
+updateQuality();
+
+// Place Order
+document.getElementById("orderBtn").onclick=async()=>{
+  const serviceId=parseInt(qualityEl.value);
+  const link=document.getElementById("link").value;
+  const quantity=parseInt(qtyEl.value);
+
+  if(!link) return alert("Enter WhatsApp link");
+
+  const email=localStorage.getItem("userEmail");
+
+  const res=await fetch("/api/order",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      email,
+      service:serviceId,
+      link,
+      quantity
+    })
   });
 
-  const data = await res.json();
-  alert(data.success ? "Order placed successfully!" : "Order failed.");
-}
+  const data=await res.json();
+
+  if(data.error) alert("Error: "+data.error);
+  else alert("Order Placed ✅");
+};
 </script>
 
 </body>
