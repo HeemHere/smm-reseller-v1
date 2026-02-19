@@ -1,71 +1,232 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>DCPYnet | TikTok Services</title>
-  <style>
-    body { background:#000; color:#fff; font-family:Arial; text-align:center; padding:40px; }
-    h1 { color:#00c46b; }
-    .card { background:#111; padding:30px; max-width:500px; margin:auto; border-radius:12px; border:1px solid #1a1a1a; }
-    select,input { width:100%; padding:10px; margin:10px 0; background:#000; color:#fff; border:1px solid #333; border-radius:6px; }
-    button { background:#00c46b; color:#000; padding:12px; border:none; border-radius:6px; cursor:pointer; width:100%; font-weight:bold; }
-    .price { margin-top:15px; font-weight:bold; color:#00c46b; }
-  </style>
+<meta charset="UTF-8">
+<title>DCPYnet - TikTok Services</title>
+
+<style>
+:root {
+  --bg:#000;
+  --text:#fff;
+  --green:#00c46b;
+  --card:#0d0d0d;
+  font-family:Arial;
+}
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header {
+  text-align:center;
+  padding:50px;
+  font-size:2.8rem;
+  font-weight:800;
+}
+header span {color:var(--green);}
+
+.container {
+  max-width:650px;
+  margin:auto;
+  padding:25px;
+}
+
+label {
+  display:block;
+  margin-top:18px;
+  font-weight:bold;
+}
+
+select,input {
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+}
+
+button {
+  margin-top:25px;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:10px;
+  background:var(--green);
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#total {
+  margin-top:15px;
+  font-weight:bold;
+  color:var(--green);
+}
+</style>
 </head>
+
 <body>
 
-<h1>TikTok Services</h1>
+<header><span>DCPYnet</span> TikTok</header>
 
-<div class="card">
-  <select id="serviceSelect"></select>
-  <input type="text" id="link" placeholder="TikTok Video / Profile Link">
-  <input type="number" id="quantity" placeholder="Quantity" min="100">
-  <div class="price" id="priceDisplay">Total: $0.00</div>
-  <button onclick="placeOrder()">Place Order</button>
+<div class="container">
+
+<label>Category</label>
+<select id="category">
+  <option value="followers">Followers</option>
+</select>
+
+<label>Quality</label>
+<select id="quality"></select>
+
+<label id="refillLabel" style="display:none;">Refill</label>
+<select id="refill" style="display:none;"></select>
+
+<label>Quantity</label>
+<input type="number" id="quantity" value="1000">
+
+<label>Link</label>
+<input type="text" id="link" placeholder="Paste TikTok profile link">
+
+<div id="total">Total: $0.00</div>
+
+<button id="orderBtn">Place Order</button>
+
 </div>
 
 <script>
-const services = [
-  { id: 3001, name: "TikTok Followers | HQ | No Refill", price: 1.10 },
-  { id: 3002, name: "TikTok Followers | 30 Day Refill", price: 1.40 },
-  { id: 3003, name: "TikTok Video Views | Cheap", price: 0.30 }
-];
+const services = {
 
-const select = document.getElementById("serviceSelect");
+followers: [
 
-services.forEach(service => {
-  const option = document.createElement("option");
-  option.value = service.id;
-  option.textContent = `${service.name} — $${service.price}/1000`;
-  select.appendChild(option);
-});
+  // HQ Profiles
+  {id:6910, name:"HQ Profiles", refill:"90 Days", price:2.74},
+  {id:6911, name:"HQ Profiles", refill:"365 Days", price:2.87},
+  {id:6913, name:"HQ Profiles", refill:"LifeTime", price:3.41},
 
-document.getElementById("quantity").addEventListener("input", updatePrice);
-select.addEventListener("change", updatePrice);
+  // HQ Accounts With Photo
+  {id:6861, name:"HQ Accounts With Photo", refill:"365 Days", price:2.96},
+  {id:6863, name:"HQ Accounts With Photo", refill:"LifeTime", price:3.57},
 
-function updatePrice() {
-  const quantity = document.getElementById("quantity").value;
-  const service = services.find(s => s.id == select.value);
-  if (!quantity || !service) return;
-  const total = (quantity / 1000) * service.price;
-  document.getElementById("priceDisplay").textContent = "Total: $" + total.toFixed(2);
+  // Real Accounts SuperFast
+  {id:6984, name:"100% Real Accounts SuperFast", refill:"365 Days", price:3.32},
+  {id:6986, name:"100% Real Accounts SuperFast", refill:"LifeTime", price:3.58},
+
+  // Worldwide Real Profiles
+  {id:7116, name:"Worldwide Real Profiles", refill:"30 Days", price:3.58},
+  {id:6972, name:"Worldwide Real Profiles", refill:"365 Days", price:3.64},
+  {id:6985, name:"Worldwide Real Profiles", refill:"LifeTime", price:3.83},
+
+  // Low Quality Accounts
+  {id:3412, name:"LQ Accounts", refill:"30 Days", price:2.79},
+  {id:4438, name:"LQ Accounts", refill:"30 Days", price:2.92},
+
+  // Real Active Accounts
+  {id:3798, name:"Real Active Accounts", refill:"LifeTime", price:3.19},
+  {id:4486, name:"Real Active Accounts", refill:"30 Days", price:2.68},
+  {id:4516, name:"Real Active Accounts", refill:"LifeTime", price:2.82},
+
+  // Cheap Real + Bot
+  {id:6121, name:"Real & Bot Profiles", refill:"30 Days", price:2.55},
+
+  // Max 10K Exclusive Small Packs
+  {id:2460, name:"Max 10K Real Accounts", refill:"30 Days", price:2.92},
+
+  // Huge Max 10M Packages
+  {id:8424, name:"Real Accounts (Max 10M)", refill:"365 Days", price:3.08},
+  {id:8425, name:"Real Accounts (Max 10M)", refill:"LifeTime", price:3.22},
+]
+
+};
+
+// Elements
+const categoryEl=document.getElementById("category");
+const qualityEl=document.getElementById("quality");
+const refillEl=document.getElementById("refill");
+const refillLabel=document.getElementById("refillLabel");
+const qtyEl=document.getElementById("quantity");
+const totalEl=document.getElementById("total");
+
+function updateQuality(){
+  const cat=categoryEl.value;
+  const list=services[cat];
+
+  const qualities=[...new Set(list.map(s=>s.name))];
+  qualityEl.innerHTML=qualities.map(q=>`<option>${q}</option>`).join("");
+
+  updateRefill();
 }
 
-async function placeOrder() {
-  const service = select.value;
-  const link = document.getElementById("link").value;
-  const quantity = document.getElementById("quantity").value;
+function updateRefill(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
 
-  if (!link || !quantity) return alert("Fill in all fields");
+  const matches=services[cat].filter(s=>s.name===qual);
+  const refills=[...new Set(matches.map(s=>s.refill).filter(r=>r))];
 
-  const res = await fetch("/api/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ service, link, quantity })
+  if(refills.length===0){
+    refillEl.style.display="none";
+    refillLabel.style.display="none";
+    refillEl.innerHTML="";
+  } else {
+    refillEl.style.display="block";
+    refillLabel.style.display="block";
+    refillEl.innerHTML=refills.map(r=>`<option>${r}</option>`).join("");
+  }
+
+  updateTotal();
+}
+
+function getService(){
+  const cat=categoryEl.value;
+  const qual=qualityEl.value;
+  const refill=refillEl.value || "";
+
+  return services[cat].find(s=>s.name===qual && s.refill===refill)
+      || services[cat].find(s=>s.name===qual);
+}
+
+function updateTotal(){
+  const svc=getService();
+  const qty=parseInt(qtyEl.value)||0;
+  const total=(svc.price*(qty/1000)).toFixed(2);
+  totalEl.textContent=`Total: $${total}`;
+}
+
+qualityEl.onchange=updateRefill;
+refillEl.onchange=updateTotal;
+qtyEl.oninput=updateTotal;
+
+updateQuality();
+
+// Place Order
+document.getElementById("orderBtn").onclick=async()=>{
+  const svc=getService();
+  const link=document.getElementById("link").value;
+  const quantity=parseInt(qtyEl.value);
+
+  if(!link) return alert("Enter TikTok link");
+
+  const email=localStorage.getItem("userEmail");
+
+  const res=await fetch("/api/order",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      email,
+      service:svc.id,
+      link,
+      quantity
+    })
   });
 
-  const data = await res.json();
-  alert(data.success ? "Order placed successfully!" : "Order failed.");
-}
+  const data=await res.json();
+
+  if(data.error) alert("Error: "+data.error);
+  else alert("Order Placed ✅");
+};
 </script>
 
 </body>
