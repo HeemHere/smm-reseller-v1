@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DCPYnet Admin Dashboard</title>
+
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 50px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00c46b;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 50px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: #0d0d0d;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 30px;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: #00c46b;
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0,196,107,0.25);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #00c46b;
+    }
+
+    .card p {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #bbb;
+    }
+
+    .logout {
+      margin-top: 50px;
+      background: red;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Admin Dashboard</h1>
+<p>Manage deposits, users, orders, bans & more.</p>
+
+<div class="grid">
+
+  <div class="card" onclick="location.href='admin.html'">
+    <h2>💳 Deposit Approvals</h2>
+    <p>Approve or reject add-funds requests</p>
+  </div>
+
+  <div class="card" onclick="location.href='admin-users.html'">
+    <h2>👤 Manage Users</h2>
+    <p>View balances, adjust funds manually</p>
+  </div>
+
+  <div class="card" onclick="location.href='admin-search.html'">
+    <h2>🔍 Search User</h2>
+    <p>Find any user instantly by email</p>
+  </div>
+
+  <div class="card" onclick="location.href='admin-orders.html'">
+    <h2>📦 Orders History</h2>
+    <p>See all orders + spending totals</p>
+  </div>
+
+  <div class="card" onclick="location.href='admin-bans.html'">
+    <h2>⛔ Ban System</h2>
+    <p>Disable users from ordering</p>
+  </div>
+
+</div>
+
+<button class="logout" onclick="logoutAdmin()">Logout Admin</button>
+
+<script>
+  // 🔒 Admin lock
+  if (localStorage.getItem("admin") !== "true") {
+    window.location.href = "/admin-login.html";
+  }
+
+  function logoutAdmin() {
+    localStorage.removeItem("admin");
+    window.location.href = "/dashboard.html";
+  }
+</script>
+
+</body>
+</html>
