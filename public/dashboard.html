@@ -1,54 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>DCPYnet Dashboard</title>
 
   <style>
-    body {
-      background: black;
-      color: white;
-      font-family: Arial;
-      padding: 40px;
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --green: #00c46b;
+      --card-bg: rgba(13,13,13,0.88);
+      --border: #1a1a1a;
+      --radius: 16px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .main {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: auto;
+      padding: 60px 20px;
       text-align: center;
     }
 
     h1 {
-      color: #00c46b;
-      font-size: 2.5rem;
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 10px;
     }
 
-    a {
-      display: block;
-      margin: 15px auto;
-      padding: 15px;
-      width: 320px;
-      background: #0d0d0d;
-      border: 1px solid #222;
+    h1 span {
+      color: var(--green);
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 50px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      cursor: pointer;
+      transition: 0.25s ease;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--green);
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(0,196,107,0.25);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: var(--green);
+    }
+
+    .card p {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      color: #bbb;
+    }
+
+    .admin {
+      margin-top: 50px;
+      display: inline-block;
+      padding: 14px 25px;
       border-radius: 12px;
-      text-decoration: none;
-      color: white;
+      border: 1px solid var(--green);
+      color: var(--green);
       font-weight: bold;
+      text-decoration: none;
+      transition: 0.25s;
     }
 
-    a:hover {
-      border-color: #00c46b;
-      color: #00c46b;
+    .admin:hover {
+      background: var(--green);
+      color: black;
     }
   </style>
 </head>
 
 <body>
 
-<h1>DCPYnet Dashboard</h1>
+<!-- Snake Background -->
+<canvas id="snake-bg"></canvas>
 
-<a href="instagram-cheap.html">Instagram Services</a>
-<a href="facebook.html">Facebook Services</a>
-<a href="tiktok.html">TikTok Services</a>
+<div class="main">
+  <h1><span>DCPY</span>net Dashboard</h1>
+  <p>Select a service category to begin ordering.</p>
 
-<a href="add-funds.html">💳 Add Funds</a>
-<a href="my-deposits.html">📥 My Deposits</a>
+  <div class="grid">
 
-<a href="admin-login.html">🛠 Admin Dashboard</a>
+    <div class="card" onclick="location.href='instagram-cheap.html'">
+      <h2>📸 Instagram Services</h2>
+      <p>Followers • Likes • Comments</p>
+    </div>
+
+    <div class="card" onclick="location.href='facebook.html'">
+      <h2>📘 Facebook Services</h2>
+      <p>Followers • Reactions • Engagement</p>
+    </div>
+
+    <div class="card" onclick="location.href='tiktok.html'">
+      <h2>🎵 TikTok Services</h2>
+      <p>Likes • Followers • Views</p>
+    </div>
+
+    <div class="card" onclick="location.href='whatsapp.html'">
+      <h2>💬 WhatsApp Services</h2>
+      <p>Group Members • Boost Growth</p>
+    </div>
+
+    <div class="card" onclick="location.href='telegram.html'">
+      <h2>📢 Telegram Services</h2>
+      <p>Channel Followers • Post Likes</p>
+    </div>
+
+    <div class="card" onclick="location.href='add-funds.html'">
+      <h2>💳 Add Funds</h2>
+      <p>Deposit money into your balance</p>
+    </div>
+
+  </div>
+
+  <a class="admin" href="admin-login.html">🛠 Admin Dashboard</a>
+</div>
+
+<script>
+/* Snake Background Animation */
+const canvas = document.getElementById("snake-bg");
+const ctx = canvas.getContext("2d");
+
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
+
+class SnakeLine {
+  constructor() {
+    this.reset();
+  }
+
+  reset() {
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+    this.vx = (Math.random() - 0.5) * 2;
+    this.vy = (Math.random() - 0.5) * 2;
+    this.length = 60 + Math.random() * 120;
+    this.history = [];
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+
+    this.history.push({ x: this.x, y: this.y });
+    if (this.history.length > this.length) this.history.shift();
+
+    if (this.x < 0 || this.x > w) this.vx *= -1;
+    if (this.y < 0 || this.y > h) this.vy *= -1;
+  }
+
+  draw() {
+    ctx.beginPath();
+    for (let i = 0; i < this.history.length - 1; i++) {
+      const p1 = this.history[i];
+      const p2 = this.history[i + 1];
+      ctx.strokeStyle = "#00c46b";
+      ctx.lineWidth = 2;
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+    }
+    ctx.stroke();
+  }
+}
+
+const snakes = [];
+for (let i = 0; i < 25; i++) snakes.push(new SnakeLine());
+
+function animate() {
+  ctx.fillStyle = "rgba(0,0,0,0.12)";
+  ctx.fillRect(0, 0, w, h);
+
+  snakes.forEach(s => {
+    s.update();
+    s.draw();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener("resize", () => {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+});
+</script>
 
 </body>
 </html>
