@@ -12,52 +12,40 @@ export default async function handler(req, res) {
 
   const { deposit_id } = req.body;
 
-  if (!deposit_id) {
-    return res.status(400).json({ error: "Missing deposit ID" });
-  }
-
-  // 1️⃣ Get deposit request
-  const { data: deposit, error } = await supabase
+  // Get deposit
+  const { data: deposit } = await supabase
     .from("deposits")
     .select("*")
     .eq("id", deposit_id)
     .single();
 
-  if (error || !deposit) {
+  if (!deposit) {
     return res.status(404).json({ error: "Deposit not found" });
   }
 
-  if (deposit.status === "approved") {
-    return res.status(400).json({ error: "Already approved" });
-  }
+  // Mark deposit approved
+  await supabase
+    .from("deposits")
+    .update({ status: "approved" })
+    .eq("id", deposit_id);
 
-  // 2️⃣ Get user balance
+  // Update user balance + total deposited
   const { data: user } = await supabase
     .from("users")
     .select("*")
     .eq("email", deposit.email)
     .single();
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  // 3️⃣ Add funds
-  const newBalance = parseFloat(user.balance) + parseFloat(deposit.amount);
+  const newBalance = Number(user.balance) + Number(deposit.amount);
+  const newDeposited = Number(user.total_deposited) + Number(deposit.amount);
 
   await supabase
     .from("users")
-    .update({ balance: newBalance })
+    .update({
+      balance: newBalance,
+      total_deposited: newDeposited
+    })
     .eq("email", deposit.email);
 
-  // 4️⃣ Mark deposit approved
-  await supabase
-    .from("deposits")
-    .update({ status: "approved" })
-    .eq("id", deposit_id);
-
-  res.status(200).json({
-    success: true,
-    newBalance
-  });
+  res.status(200).json({ success: true, newBalance });
 }
