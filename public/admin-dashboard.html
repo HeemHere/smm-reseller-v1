@@ -86,7 +86,7 @@
 
   <div class="card" onclick="location.href='admin-users.html'">
     <h2>👤 Manage Users</h2>
-    <p>View balances, adjust funds manually</p>
+    <p>View balances + adjust funds manually</p>
   </div>
 
   <div class="card" onclick="location.href='admin-search.html'">
@@ -109,7 +109,6 @@
 <button class="logout" onclick="logoutAdmin()">Logout Admin</button>
 
 <script>
-  // 🔒 Admin lock
   if (localStorage.getItem("admin") !== "true") {
     window.location.href = "/admin-login.html";
   }
