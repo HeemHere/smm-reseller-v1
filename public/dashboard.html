@@ -2,51 +2,108 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DCPYnet Dashboard</title>
+<title>DCPYnet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
+*{
   margin:0;
-  font-family:Arial;
-  background:#000;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:#050505;
   color:white;
 }
 
+/* NAVBAR */
 nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:15px 30px;
-  background:#111;
-  border-bottom:1px solid #00c46b;
+  padding:15px 20px;
+  background:#0c0c0c;
+  border-bottom:1px solid #00ff88;
 }
 
 .logo{
-  font-size:1.5rem;
-  font-weight:bold;
-  color:#00c46b;
+  font-size:1.4rem;
+  font-weight:700;
+  color:#00ff88;
+  text-shadow:0 0 8px #00ff88;
+}
+
+.nav-links{
+  display:flex;
+  gap:20px;
+  align-items:center;
 }
 
 .nav-links a{
-  color:white;
+  color:#ccc;
   text-decoration:none;
-  margin-left:20px;
+  font-size:0.9rem;
+}
+
+.nav-links a:hover{
+  color:#00ff88;
 }
 
 .balance{
-  color:#00c46b;
-  font-weight:bold;
+  color:#00ff88;
+  font-weight:600;
+  font-size:0.9rem;
 }
 
+/* MAIN */
 .container{
-  padding:40px;
+  padding:30px 20px;
+  max-width:900px;
+  margin:auto;
+}
+
+.title{
+  font-size:1.6rem;
+  margin-bottom:25px;
+  color:#00ff88;
+  text-shadow:0 0 6px #00ff88;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:20px;
 }
 
 .card{
-  background:#111;
-  padding:25px;
-  border-radius:10px;
-  margin-bottom:20px;
+  background:#0f0f0f;
+  padding:25px 15px;
+  border-radius:12px;
+  text-align:center;
+  transition:0.2s;
+  border:1px solid #111;
+}
+
+.card:hover{
+  border:1px solid #00ff88;
+  box-shadow:0 0 15px #00ff88;
+  transform:translateY(-3px);
+}
+
+.card a{
+  text-decoration:none;
+  color:white;
+  font-weight:600;
+  display:block;
+}
+
+.card span{
+  display:block;
+  margin-top:8px;
+  font-size:0.8rem;
+  color:#888;
 }
 </style>
 </head>
@@ -68,21 +125,46 @@ nav{
 
 <div class="container">
 
-<div class="card">
-  <h2>Services</h2>
-  <p>Select a platform:</p>
-  <a href="instagram.html">Instagram</a><br><br>
-  <a href="tiktok.html">TikTok</a><br><br>
-  <a href="facebook.html">Facebook</a><br><br>
-  <a href="telegram.html">Telegram</a><br><br>
-  <a href="whatsapp.html">WhatsApp</a>
-</div>
+  <div class="title">Select Platform</div>
+
+  <div class="grid">
+
+    <div class="card">
+      <a href="instagram-cheap.html">Instagram</a>
+      <span>Followers • Likes • Comments</span>
+    </div>
+
+    <div class="card">
+      <a href="tiktok.html">TikTok</a>
+      <span>Followers • Likes • Views</span>
+    </div>
+
+    <div class="card">
+      <a href="facebook.html">Facebook</a>
+      <span>Followers • Reactions • Shares</span>
+    </div>
+
+    <div class="card">
+      <a href="telegram.html">Telegram</a>
+      <span>Members • Non Drop</span>
+    </div>
+
+    <div class="card">
+      <a href="whatsapp.html">WhatsApp</a>
+      <span>Members • Auto Reactions</span>
+    </div>
+
+  </div>
 
 </div>
 
 <script>
 async function loadBalance(){
   const email = localStorage.getItem("userEmail");
+  if(!email){
+    window.location.href="index.html";
+    return;
+  }
 
   const res = await fetch("/api/get-user",{
     method:"POST",
@@ -91,8 +173,9 @@ async function loadBalance(){
   });
 
   const data = await res.json();
+
   document.getElementById("balance").innerText =
-    "Balance: $" + parseFloat(data.balance).toFixed(2);
+    "Balance: $" + parseFloat(data.balance || 0).toFixed(2);
 }
 
 function logout(){
