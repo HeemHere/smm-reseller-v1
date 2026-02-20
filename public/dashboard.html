@@ -4,37 +4,127 @@
 <meta charset="UTF-8">
 <title>DCPYnet Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{
-  background:#000;
-  color:white;
-  font-family:Arial;
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
 }
+
+body{
+  background:#050505;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* Snake grid background */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(rgba(0,255,136,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.05) 1px, transparent 1px);
+  background-size:40px 40px;
+  animation:moveGrid 20s linear infinite;
+  z-index:-1;
+}
+
+@keyframes moveGrid{
+  from{background-position:0 0, 0 0;}
+  to{background-position:40px 40px, 40px 40px;}
+}
+
+/* NAV */
 nav{
   display:flex;
   justify-content:space-between;
-  padding:15px 20px;
-  background:#111;
+  align-items:center;
+  padding:15px 25px;
+  background:#0c0c0c;
+  border-bottom:1px solid #00ff88;
 }
+
 .logo{
-  color:#00ff88;
+  font-size:1.4rem;
   font-weight:bold;
+  color:#00ff88;
+  text-shadow:0 0 10px #00ff88;
 }
+
 .balance{
   color:#00ff88;
+  font-weight:600;
 }
+
+/* MAIN */
 .container{
-  padding:30px;
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
 }
-a{
+
+.title{
+  font-size:1.8rem;
+  margin-bottom:30px;
+  color:#00ff88;
+  text-shadow:0 0 8px #00ff88;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:#0f0f0f;
+  padding:30px 20px;
+  border-radius:14px;
+  text-align:center;
+  transition:0.2s;
+  border:1px solid #111;
+}
+
+.card:hover{
+  border:1px solid #00ff88;
+  box-shadow:0 0 20px #00ff88;
+  transform:translateY(-4px);
+}
+
+.card a{
+  text-decoration:none;
+  color:white;
+  font-weight:600;
+  font-size:1.1rem;
+}
+
+.card span{
   display:block;
-  margin-top:15px;
+  margin-top:10px;
+  font-size:0.85rem;
+  color:#888;
+}
+
+.logout{
+  margin-top:40px;
+  display:inline-block;
+  padding:10px 20px;
+  border:1px solid #00ff88;
   color:#00ff88;
   text-decoration:none;
+  border-radius:8px;
+}
+
+.logout:hover{
+  background:#00ff88;
+  color:black;
 }
 </style>
 </head>
+
 <body>
 
 <nav>
@@ -44,32 +134,51 @@ a{
 
 <div class="container">
 
-<h2>Services</h2>
+  <div class="title">Select Platform</div>
 
-<a href="instagram-cheap.html">Instagram</a>
-<a href="tiktok.html">TikTok</a>
-<a href="facebook.html">Facebook</a>
-<a href="telegram.html">Telegram</a>
-<a href="whatsapp.html">WhatsApp</a>
+  <div class="grid">
 
-<br>
-<a href="#" onclick="logout()">Logout</a>
+    <div class="card">
+      <a href="instagram-cheap.html">Instagram</a>
+      <span>Followers • Likes • Comments</span>
+    </div>
+
+    <div class="card">
+      <a href="tiktok.html">TikTok</a>
+      <span>Followers • Likes • Views</span>
+    </div>
+
+    <div class="card">
+      <a href="facebook.html">Facebook</a>
+      <span>Followers • Reactions • Shares</span>
+    </div>
+
+    <div class="card">
+      <a href="telegram.html">Telegram</a>
+      <span>Members • Non Drop</span>
+    </div>
+
+    <div class="card">
+      <a href="whatsapp.html">WhatsApp</a>
+      <span>Members • Auto Reactions</span>
+    </div>
+
+  </div>
+
+  <a class="logout" href="#" onclick="logout()">Logout</a>
 
 </div>
 
 <script>
-// Wait until everything loads
 window.onload = async function(){
 
   const email = localStorage.getItem("userEmail");
 
-  // If absolutely missing, redirect
   if(!email){
-    window.location.href = "login.html";
+    window.location.href="login.html";
     return;
   }
 
-  // Try loading balance but don't force redirect if it fails
   try{
     const res = await fetch("/api/get-user",{
       method:"POST",
