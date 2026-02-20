@@ -14,16 +14,16 @@ body{
   overflow-x:hidden;
 }
 
-/* Grid background */
+/* Snake Grid */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   background:
-    linear-gradient(rgba(0,255,136,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,136,0.05) 1px, transparent 1px);
+    linear-gradient(rgba(0,255,136,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.06) 1px, transparent 1px);
   background-size:40px 40px;
-  animation:moveGrid 20s linear infinite;
+  animation:moveGrid 15s linear infinite;
   z-index:-1;
 }
 
@@ -32,86 +32,97 @@ body::before{
   to{background-position:40px 40px,40px 40px;}
 }
 
+/* NAV */
 nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:15px 25px;
+  padding:18px 30px;
   background:#0c0c0c;
   border-bottom:1px solid #00ff88;
 }
 
 .logo{
-  font-size:1.3rem;
+  font-size:1.4rem;
+  font-weight:bold;
   color:#00ff88;
-  text-shadow:0 0 10px #00ff88;
+  text-shadow:0 0 12px #00ff88;
 }
 
-.right{
+.nav-right{
   display:flex;
-  gap:20px;
   align-items:center;
+  gap:12px;
 }
 
 .balance{
   color:#00ff88;
   font-weight:bold;
+  text-shadow:0 0 8px #00ff88;
 }
 
-.admin-btn{
+/* Buttons */
+.btn{
+  padding:7px 14px;
+  border-radius:6px;
+  border:1px solid #00ff88;
   color:#00ff88;
   text-decoration:none;
-  border:1px solid #00ff88;
-  padding:6px 12px;
-  border-radius:6px;
-  display:none;
+  font-size:0.8rem;
+  cursor:pointer;
+  transition:0.2s;
+  background:transparent;
 }
 
-.admin-btn:hover{
+.btn:hover{
   background:#00ff88;
   color:black;
 }
 
+/* MAIN */
 .container{
-  max-width:1000px;
+  max-width:1100px;
   margin:auto;
-  padding:40px 20px;
+  padding:50px 20px;
 }
 
 .title{
-  font-size:1.8rem;
-  margin-bottom:30px;
+  font-size:2rem;
+  margin-bottom:35px;
   color:#00ff88;
-  text-shadow:0 0 8px #00ff88;
+  text-shadow:0 0 10px #00ff88;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:25px;
 }
 
 .card{
   background:#0f0f0f;
-  padding:30px;
+  padding:35px 20px;
   border-radius:14px;
   text-align:center;
-  transition:0.2s;
+  transition:0.25s;
+  border:1px solid #111;
 }
 
 .card:hover{
-  box-shadow:0 0 20px #00ff88;
-  transform:translateY(-4px);
+  border:1px solid #00ff88;
+  box-shadow:0 0 25px #00ff88;
+  transform:translateY(-5px);
 }
 
 .card a{
   text-decoration:none;
   color:white;
   font-weight:bold;
+  font-size:1.1rem;
 }
 
 .logout{
-  margin-top:40px;
+  margin-top:45px;
   display:inline-block;
   padding:10px 20px;
   border:1px solid #00ff88;
@@ -131,9 +142,12 @@ nav{
 
 <nav>
   <div class="logo">DCPYnet</div>
-  <div class="right">
-    <a href="admin-dashboard.html" class="admin-btn" id="adminBtn">Admin</a>
+
+  <div class="nav-right">
     <div class="balance" id="balance">Balance: $0.00</div>
+    <button class="btn" onclick="reloadBalance()">Reload</button>
+    <a href="add-funds.html" class="btn">Add Funds</a>
+    <a href="admin-dashboard.html" class="btn" id="adminBtn" style="display:none;">Admin</a>
   </div>
 </nav>
 
@@ -154,25 +168,29 @@ nav{
 </div>
 
 <script>
+let userEmail = null;
+
 window.onload = async function(){
+  userEmail = localStorage.getItem("userEmail");
 
-  const email = localStorage.getItem("userEmail");
-
-  if(!email){
+  if(!userEmail){
     window.location.href="login.html";
     return;
   }
 
-  // Show admin button if admin email
-  if(email === "rockayyan2000@gmail.com"){
+  if(userEmail === "rockayyan2000@gmail.com"){
     document.getElementById("adminBtn").style.display="inline-block";
   }
 
+  loadBalance();
+};
+
+async function loadBalance(){
   try{
     const res = await fetch("/api/get-user",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({email})
+      body:JSON.stringify({email:userEmail})
     });
 
     const data = await res.json();
@@ -182,8 +200,12 @@ window.onload = async function(){
         "Balance: $" + parseFloat(data.balance).toFixed(2);
     }
   }catch(e){
-    console.log("Balance load skipped");
+    console.log("Balance load error");
   }
+}
+
+function reloadBalance(){
+  loadBalance();
 }
 
 function logout(){
