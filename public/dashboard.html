@@ -2,188 +2,100 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DCPYnet</title>
+<title>DCPYnet Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, sans-serif;
-}
-
 body{
-  background:#050505;
+  margin:0;
+  font-family:Arial;
+  background:#000;
   color:white;
 }
-
-/* NAVBAR */
 nav{
   display:flex;
   justify-content:space-between;
-  align-items:center;
   padding:15px 20px;
-  background:#0c0c0c;
+  background:#111;
   border-bottom:1px solid #00ff88;
 }
-
 .logo{
-  font-size:1.4rem;
-  font-weight:700;
   color:#00ff88;
-  text-shadow:0 0 8px #00ff88;
+  font-weight:bold;
 }
-
-.nav-links{
-  display:flex;
-  gap:20px;
-  align-items:center;
-}
-
-.nav-links a{
-  color:#ccc;
-  text-decoration:none;
-  font-size:0.9rem;
-}
-
-.nav-links a:hover{
-  color:#00ff88;
-}
-
 .balance{
   color:#00ff88;
-  font-weight:600;
-  font-size:0.9rem;
 }
-
-/* MAIN */
 .container{
-  padding:30px 20px;
-  max-width:900px;
-  margin:auto;
+  padding:30px;
 }
-
-.title{
-  font-size:1.6rem;
-  margin-bottom:25px;
+a{
   color:#00ff88;
-  text-shadow:0 0 6px #00ff88;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:20px;
-}
-
-.card{
-  background:#0f0f0f;
-  padding:25px 15px;
-  border-radius:12px;
-  text-align:center;
-  transition:0.2s;
-  border:1px solid #111;
-}
-
-.card:hover{
-  border:1px solid #00ff88;
-  box-shadow:0 0 15px #00ff88;
-  transform:translateY(-3px);
-}
-
-.card a{
   text-decoration:none;
-  color:white;
-  font-weight:600;
   display:block;
-}
-
-.card span{
-  display:block;
-  margin-top:8px;
-  font-size:0.8rem;
-  color:#888;
+  margin-top:15px;
 }
 </style>
 </head>
-
 <body>
 
 <nav>
   <div class="logo">DCPYnet</div>
-
-  <div class="nav-links">
-    <a href="dashboard.html">Home</a>
-    <a href="orders.html">Orders</a>
-    <a href="account.html">Account</a>
-    <a href="#" onclick="logout()">Logout</a>
-  </div>
-
-  <div class="balance" id="balance">Balance: $0.00</div>
+  <div class="balance" id="balance">Balance: Loading...</div>
 </nav>
 
 <div class="container">
+  <h2>Services</h2>
 
-  <div class="title">Select Platform</div>
+  <a href="instagram-cheap.html">Instagram</a>
+  <a href="tiktok.html">TikTok</a>
+  <a href="facebook.html">Facebook</a>
+  <a href="telegram.html">Telegram</a>
+  <a href="whatsapp.html">WhatsApp</a>
 
-  <div class="grid">
-
-    <div class="card">
-      <a href="instagram-cheap.html">Instagram</a>
-      <span>Followers • Likes • Comments</span>
-    </div>
-
-    <div class="card">
-      <a href="tiktok.html">TikTok</a>
-      <span>Followers • Likes • Views</span>
-    </div>
-
-    <div class="card">
-      <a href="facebook.html">Facebook</a>
-      <span>Followers • Reactions • Shares</span>
-    </div>
-
-    <div class="card">
-      <a href="telegram.html">Telegram</a>
-      <span>Members • Non Drop</span>
-    </div>
-
-    <div class="card">
-      <a href="whatsapp.html">WhatsApp</a>
-      <span>Members • Auto Reactions</span>
-    </div>
-
-  </div>
-
+  <br><br>
+  <a href="orders.html">My Orders</a>
+  <a href="account.html">Account</a>
+  <a href="#" onclick="logout()">Logout</a>
 </div>
 
 <script>
-async function loadBalance(){
+window.addEventListener("DOMContentLoaded", async () => {
+
   const email = localStorage.getItem("userEmail");
-  if(!email){
-    window.location.href="index.html";
+
+  // Only redirect if absolutely nothing exists
+  if (!email || email === "undefined" || email === "null") {
+    window.location.href = "login.html";
     return;
   }
 
-  const res = await fetch("/api/get-user",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({email})
-  });
+  try {
+    const res = await fetch("/api/get-user",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email})
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  document.getElementById("balance").innerText =
-    "Balance: $" + parseFloat(data.balance || 0).toFixed(2);
-}
+    if(!data || data.error){
+      console.log("User fetch failed");
+      return;
+    }
+
+    document.getElementById("balance").innerText =
+      "Balance: $" + parseFloat(data.balance || 0).toFixed(2);
+
+  } catch (err) {
+    console.log("Fetch failed but staying logged in");
+  }
+
+});
 
 function logout(){
   localStorage.removeItem("userEmail");
-  window.location.href="index.html";
+  window.location.href="login.html";
 }
-
-loadBalance();
 </script>
 
 </body>
