@@ -6,17 +6,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
-  margin:0;
-  font-family:Arial;
   background:#000;
   color:white;
+  font-family:Arial;
+  margin:0;
 }
 nav{
   display:flex;
   justify-content:space-between;
   padding:15px 20px;
   background:#111;
-  border-bottom:1px solid #00ff88;
 }
 .logo{
   color:#00ff88;
@@ -29,10 +28,10 @@ nav{
   padding:30px;
 }
 a{
-  color:#00ff88;
-  text-decoration:none;
   display:block;
   margin-top:15px;
+  color:#00ff88;
+  text-decoration:none;
 }
 </style>
 </head>
@@ -40,36 +39,38 @@ a{
 
 <nav>
   <div class="logo">DCPYnet</div>
-  <div class="balance" id="balance">Balance: Loading...</div>
+  <div class="balance" id="balance">Balance: $0.00</div>
 </nav>
 
 <div class="container">
-  <h2>Services</h2>
 
-  <a href="instagram-cheap.html">Instagram</a>
-  <a href="tiktok.html">TikTok</a>
-  <a href="facebook.html">Facebook</a>
-  <a href="telegram.html">Telegram</a>
-  <a href="whatsapp.html">WhatsApp</a>
+<h2>Services</h2>
 
-  <br><br>
-  <a href="orders.html">My Orders</a>
-  <a href="account.html">Account</a>
-  <a href="#" onclick="logout()">Logout</a>
+<a href="instagram-cheap.html">Instagram</a>
+<a href="tiktok.html">TikTok</a>
+<a href="facebook.html">Facebook</a>
+<a href="telegram.html">Telegram</a>
+<a href="whatsapp.html">WhatsApp</a>
+
+<br>
+<a href="#" onclick="logout()">Logout</a>
+
 </div>
 
 <script>
-window.addEventListener("DOMContentLoaded", async () => {
+// Wait until everything loads
+window.onload = async function(){
 
   const email = localStorage.getItem("userEmail");
 
-  // Only redirect if absolutely nothing exists
-  if (!email || email === "undefined" || email === "null") {
+  // If absolutely missing, redirect
+  if(!email){
     window.location.href = "login.html";
     return;
   }
 
-  try {
+  // Try loading balance but don't force redirect if it fails
+  try{
     const res = await fetch("/api/get-user",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -78,19 +79,15 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     const data = await res.json();
 
-    if(!data || data.error){
-      console.log("User fetch failed");
-      return;
+    if(data && data.balance !== undefined){
+      document.getElementById("balance").innerText =
+        "Balance: $" + parseFloat(data.balance).toFixed(2);
     }
 
-    document.getElementById("balance").innerText =
-      "Balance: $" + parseFloat(data.balance || 0).toFixed(2);
-
-  } catch (err) {
-    console.log("Fetch failed but staying logged in");
+  } catch(e){
+    console.log("Balance load skipped");
   }
-
-});
+}
 
 function logout(){
   localStorage.removeItem("userEmail");
