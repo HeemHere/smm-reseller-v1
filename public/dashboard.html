@@ -6,36 +6,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 
 body{
-  background:#0c1110;
+  background:#000;
   color:white;
-  overflow-x:hidden;
+  overflow:hidden;
 }
 
-/* ==== SNAKE SQUIGGLE LINES ==== */
-.snakes{
+/* ==== RAIN LINES ==== */
+.rain{
   position:fixed;
-  width:200%;
-  height:200%;
-  top:-50%;
-  left:-50%;
-  background:
-    repeating-linear-gradient(
-      120deg,
-      rgba(0,180,120,0.06) 0px,
-      rgba(0,180,120,0.06) 2px,
-      transparent 2px,
-      transparent 40px
-    );
-  animation:snakeMove 25s linear infinite;
-  z-index:-1;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:-2;
 }
 
-@keyframes snakeMove{
-  0%{transform:translateX(0) translateY(0);}
-  100%{transform:translateX(-200px) translateY(-200px);}
+.rain span{
+  position:absolute;
+  width:2px;
+  height:120px;
+  background:linear-gradient(to bottom,rgba(255,255,255,0.9),transparent);
+  animation:fall linear infinite;
+  opacity:0.6;
+}
+
+@keyframes fall{
+  0%{transform:translateY(-200px);}
+  100%{transform:translateY(120vh);}
+}
+
+/* ==== GLOWING GROUND ==== */
+.ground{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:40%;
+  background:
+    radial-gradient(circle at 20% 70%, rgba(255,255,255,0.2), transparent 40%),
+    radial-gradient(circle at 60% 80%, rgba(255,255,255,0.15), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(255,255,255,0.2), transparent 40%);
+  filter:blur(30px);
+  z-index:-1;
 }
 
 /* ==== NAV ==== */
@@ -44,46 +58,41 @@ nav{
   justify-content:space-between;
   align-items:center;
   padding:18px 25px;
-  background:rgba(15,20,18,0.85);
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(0,180,120,0.15);
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(8px);
 }
 
 .logo{
   font-size:1.4rem;
   font-weight:600;
-  color:#3dd5a3;
+  color:white;
 }
 
 .nav-right{
   display:flex;
   align-items:center;
   gap:10px;
-  flex-wrap:wrap;
 }
 
 .balance{
   font-weight:600;
-  color:#3dd5a3;
+  color:#e0e0e0;
 }
 
-/* ==== MODERN GLASS BUTTON ==== */
+/* ==== MODERN BUTTON ==== */
 .btn{
   padding:8px 16px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.15);
   background:rgba(255,255,255,0.05);
-  color:#d2f5e8;
+  color:white;
   font-size:0.85rem;
   cursor:pointer;
   transition:0.2s;
-  backdrop-filter:blur(6px);
 }
 
 .btn:hover{
-  background:rgba(61,213,163,0.15);
-  border-color:#3dd5a3;
-  color:#3dd5a3;
+  background:rgba(255,255,255,0.15);
 }
 
 /* ==== MAIN ==== */
@@ -96,7 +105,7 @@ nav{
 .title{
   font-size:1.8rem;
   margin-bottom:30px;
-  color:#3dd5a3;
+  color:white;
 }
 
 .grid{
@@ -106,18 +115,18 @@ nav{
 }
 
 .card{
-  background:rgba(20,30,27,0.8);
+  background:rgba(255,255,255,0.05);
   padding:35px 20px;
   border-radius:18px;
   text-align:center;
   transition:0.25s;
-  border:1px solid rgba(255,255,255,0.05);
-  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(6px);
 }
 
 .card:hover{
-  border-color:#3dd5a3;
   transform:translateY(-4px);
+  background:rgba(255,255,255,0.08);
 }
 
 .card a{
@@ -132,22 +141,22 @@ nav{
   display:inline-block;
   padding:10px 20px;
   border-radius:12px;
-  border:1px solid rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.15);
   background:rgba(255,255,255,0.05);
-  color:#d2f5e8;
+  color:white;
   text-decoration:none;
 }
 
 .logout:hover{
-  border-color:#3dd5a3;
-  color:#3dd5a3;
+  background:rgba(255,255,255,0.15);
 }
 </style>
 </head>
 
 <body>
 
-<div class="snakes"></div>
+<div class="rain" id="rain"></div>
+<div class="ground"></div>
 
 <nav>
   <div class="logo">DCPYnet</div>
@@ -161,7 +170,6 @@ nav{
 </nav>
 
 <div class="container">
-
   <div class="title">Select Platform</div>
 
   <div class="grid">
@@ -173,10 +181,19 @@ nav{
   </div>
 
   <a class="logout" href="#" onclick="logout()">Logout</a>
-
 </div>
 
 <script>
+// Generate rain lines
+const rain=document.getElementById("rain");
+for(let i=0;i<60;i++){
+  const drop=document.createElement("span");
+  drop.style.left=Math.random()*100+"%";
+  drop.style.animationDuration=(2+Math.random()*3)+"s";
+  drop.style.animationDelay=Math.random()*5+"s";
+  rain.appendChild(drop);
+}
+
 let userEmail=null;
 
 window.onload=async function(){
@@ -191,33 +208,25 @@ window.onload=async function(){
     document.getElementById("adminBtn").style.display="inline-block";
   }
 
-  await loadBalance(true);
+  await loadBalance();
 };
 
-async function loadBalance(force=false){
-  try{
-    const res=await fetch("/api/get-user?"+Date.now(),{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Cache-Control":"no-cache"
-      },
-      body:JSON.stringify({email:userEmail})
-    });
+async function loadBalance(){
+  const res=await fetch("/api/get-user?"+Date.now(),{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:userEmail})
+  });
 
-    const data=await res.json();
-
-    if(data && data.balance!==undefined){
-      document.getElementById("balance").innerText=
-        "Balance: $"+parseFloat(data.balance).toFixed(2);
-    }
-  }catch(e){
-    console.log("Balance error",e);
+  const data=await res.json();
+  if(data.balance!==undefined){
+    document.getElementById("balance").innerText=
+      "Balance: $"+parseFloat(data.balance).toFixed(2);
   }
 }
 
 async function reloadBalance(){
-  await loadBalance(true);
+  await loadBalance();
 }
 
 function logout(){
