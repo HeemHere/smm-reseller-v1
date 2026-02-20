@@ -6,12 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
   background:#050505;
@@ -19,7 +14,7 @@ body{
   overflow-x:hidden;
 }
 
-/* Snake grid background */
+/* Grid background */
 body::before{
   content:"";
   position:fixed;
@@ -33,11 +28,10 @@ body::before{
 }
 
 @keyframes moveGrid{
-  from{background-position:0 0, 0 0;}
-  to{background-position:40px 40px, 40px 40px;}
+  from{background-position:0 0,0 0;}
+  to{background-position:40px 40px,40px 40px;}
 }
 
-/* NAV */
 nav{
   display:flex;
   justify-content:space-between;
@@ -48,18 +42,36 @@ nav{
 }
 
 .logo{
-  font-size:1.4rem;
-  font-weight:bold;
+  font-size:1.3rem;
   color:#00ff88;
   text-shadow:0 0 10px #00ff88;
 }
 
-.balance{
-  color:#00ff88;
-  font-weight:600;
+.right{
+  display:flex;
+  gap:20px;
+  align-items:center;
 }
 
-/* MAIN */
+.balance{
+  color:#00ff88;
+  font-weight:bold;
+}
+
+.admin-btn{
+  color:#00ff88;
+  text-decoration:none;
+  border:1px solid #00ff88;
+  padding:6px 12px;
+  border-radius:6px;
+  display:none;
+}
+
+.admin-btn:hover{
+  background:#00ff88;
+  color:black;
+}
+
 .container{
   max-width:1000px;
   margin:auto;
@@ -81,15 +93,13 @@ nav{
 
 .card{
   background:#0f0f0f;
-  padding:30px 20px;
+  padding:30px;
   border-radius:14px;
   text-align:center;
   transition:0.2s;
-  border:1px solid #111;
 }
 
 .card:hover{
-  border:1px solid #00ff88;
   box-shadow:0 0 20px #00ff88;
   transform:translateY(-4px);
 }
@@ -97,15 +107,7 @@ nav{
 .card a{
   text-decoration:none;
   color:white;
-  font-weight:600;
-  font-size:1.1rem;
-}
-
-.card span{
-  display:block;
-  margin-top:10px;
-  font-size:0.85rem;
-  color:#888;
+  font-weight:bold;
 }
 
 .logout{
@@ -129,7 +131,10 @@ nav{
 
 <nav>
   <div class="logo">DCPYnet</div>
-  <div class="balance" id="balance">Balance: $0.00</div>
+  <div class="right">
+    <a href="admin-dashboard.html" class="admin-btn" id="adminBtn">Admin</a>
+    <div class="balance" id="balance">Balance: $0.00</div>
+  </div>
 </nav>
 
 <div class="container">
@@ -137,32 +142,11 @@ nav{
   <div class="title">Select Platform</div>
 
   <div class="grid">
-
-    <div class="card">
-      <a href="instagram-cheap.html">Instagram</a>
-      <span>Followers • Likes • Comments</span>
-    </div>
-
-    <div class="card">
-      <a href="tiktok.html">TikTok</a>
-      <span>Followers • Likes • Views</span>
-    </div>
-
-    <div class="card">
-      <a href="facebook.html">Facebook</a>
-      <span>Followers • Reactions • Shares</span>
-    </div>
-
-    <div class="card">
-      <a href="telegram.html">Telegram</a>
-      <span>Members • Non Drop</span>
-    </div>
-
-    <div class="card">
-      <a href="whatsapp.html">WhatsApp</a>
-      <span>Members • Auto Reactions</span>
-    </div>
-
+    <div class="card"><a href="instagram-cheap.html">Instagram</a></div>
+    <div class="card"><a href="tiktok.html">TikTok</a></div>
+    <div class="card"><a href="facebook.html">Facebook</a></div>
+    <div class="card"><a href="telegram.html">Telegram</a></div>
+    <div class="card"><a href="whatsapp.html">WhatsApp</a></div>
   </div>
 
   <a class="logout" href="#" onclick="logout()">Logout</a>
@@ -179,6 +163,11 @@ window.onload = async function(){
     return;
   }
 
+  // Show admin button if admin email
+  if(email === "rockayyan2000@gmail.com"){
+    document.getElementById("adminBtn").style.display="inline-block";
+  }
+
   try{
     const res = await fetch("/api/get-user",{
       method:"POST",
@@ -188,12 +177,11 @@ window.onload = async function(){
 
     const data = await res.json();
 
-    if(data && data.balance !== undefined){
+    if(data.balance !== undefined){
       document.getElementById("balance").innerText =
         "Balance: $" + parseFloat(data.balance).toFixed(2);
     }
-
-  } catch(e){
+  }catch(e){
     console.log("Balance load skipped");
   }
 }
