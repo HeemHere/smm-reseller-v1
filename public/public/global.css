@@ -1,14 +1,22 @@
-/* ===== GLOBAL BACKGROUND ===== */
+/* ============================= */
+/*        GLOBAL THEME           */
+/* ============================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
 
 body{
   background:#000;
   color:white;
   overflow-x:hidden;
-  margin:0;
-  font-family:Arial,sans-serif;
 }
 
-/* Rain container */
+/* ===== RAIN BACKGROUND ===== */
+
 .rain{
   position:fixed;
   inset:0;
@@ -31,7 +39,8 @@ body{
   100%{transform:translateY(120vh);}
 }
 
-/* Glowing ground */
+/* ===== GLOWING GROUND ===== */
+
 .ground{
   position:fixed;
   bottom:0;
@@ -46,7 +55,31 @@ body{
   z-index:-1;
 }
 
-/* Modern glass button */
+/* ===== GLASS NAV ===== */
+
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 25px;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(8px);
+}
+
+.logo{
+  font-size:1.4rem;
+  font-weight:600;
+  color:white;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* ===== BUTTONS ===== */
+
 .btn{
   padding:8px 16px;
   border-radius:10px;
@@ -60,4 +93,20 @@ body{
 
 .btn:hover{
   background:rgba(255,255,255,0.15);
+}
+
+/* ===== CARDS ===== */
+
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:30px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(6px);
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,0.08);
 }
