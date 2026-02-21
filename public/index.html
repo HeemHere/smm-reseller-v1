@@ -4,38 +4,89 @@
 <meta charset="UTF-8">
 <title>DCPYnet</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="global.css">
+
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#000;
-  color:white;
+
+/* Center layout */
+.hero{
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
   height:100vh;
-  flex-direction:column;
+  text-align:center;
 }
-h1{
-  color:#00ff88;
-  text-shadow:0 0 10px #00ff88;
+
+/* Logo Glow */
+.logo{
+  font-size:3rem;
+  font-weight:700;
+  letter-spacing:2px;
+  color:#3cffb3;
+  text-shadow:
+    0 0 10px rgba(60,255,179,0.8),
+    0 0 20px rgba(60,255,179,0.6),
+    0 0 40px rgba(60,255,179,0.4);
+  margin-bottom:50px;
+  animation:fadeIn 1.2s ease;
 }
-a{
-  margin-top:20px;
-  padding:12px 25px;
-  background:#00ff88;
-  color:black;
-  text-decoration:none;
-  font-weight:bold;
-  border-radius:8px;
+
+/* Buttons */
+.main-btn{
+  width:200px;
+  padding:14px;
+  margin:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(10px);
+  color:white;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.25s;
 }
+
+.main-btn:hover{
+  background:rgba(60,255,179,0.2);
+  border-color:#3cffb3;
+  box-shadow:0 0 15px rgba(60,255,179,0.4);
+  transform:translateY(-3px);
+}
+
+/* Fade animation */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
 </style>
 </head>
+
 <body>
 
-<h1>DCPYnet</h1>
-<a href="login.html">Login</a>
-<a href="register.html">Register</a>
+<div class="hero">
+
+  <div class="logo">DCPYnet</div>
+
+  <button class="main-btn" onclick="goLogin()">Login</button>
+  <button class="main-btn" onclick="goRegister()">Register</button>
+
+</div>
+
+<script src="background.js"></script>
+
+<script>
+function goLogin(){
+  window.location.href="login.html";
+}
+
+function goRegister(){
+  window.location.href="register.html";
+}
+</script>
 
 </body>
 </html>
